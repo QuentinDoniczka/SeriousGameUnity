@@ -1,0 +1,6 @@
+
+|csharpsquid:S101"YRename class 'SQLManager' to match pascal case naming rules, consider using 'SqlManager'.(‰ü‚ˆ8°Ì€¦Æ2
+csharpsquid:S3217R"dEither change the type of 'prop' to 'JToken' or iterate on a generic collection of type 'JProperty'.(Ë«¹Èûÿÿÿÿ8èïÇ¥Æ2
+csharpsquid:S3217j"dEither change the type of 'prop' to 'JToken' or iterate on a generic collection of type 'JProperty'.(êáñøÿÿÿÿ8èïÇ¥Æ2
+Xcsharpsquid:S1135
+"4Complete the task associated to this 'TODO' comment.(±ÅÚ8èïÇ¥Æ2
