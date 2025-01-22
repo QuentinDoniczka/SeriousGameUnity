@@ -1,29 +1,30 @@
-using UnityEngine;
-using Project.Core.Service;
 using Project.Core.Events;
-using Project.Scenes.Managers;
+using Project.Core.Service;
 using Project.Game.Managers;
+using Project.Scenes.Managers;
+using UnityEngine;
 
 namespace Project.Core
 {
     public class CoreManager : MonoBehaviour
     {
-        public static CoreManager Instance { get; private set; }
+        private static CoreManager _instance;
+        public static CoreManager Instance => _instance;
 
         private void Awake()
         {
-            if (Instance != null)
+            if (_instance != null)
             {
                 Destroy(gameObject);
                 return;
             }
             
-            Instance = this;
+            _instance = this;
             DontDestroyOnLoad(gameObject);
-            InitializeCore();
+            InitializeSystems();
         }
 
-        private void InitializeCore()
+        private void InitializeSystems()
         {
             _ = ServiceManager.Instance;
             _ = EventManager.Instance;

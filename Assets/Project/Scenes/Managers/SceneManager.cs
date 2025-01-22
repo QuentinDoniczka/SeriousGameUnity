@@ -19,7 +19,7 @@ namespace Project.Scenes.Managers
 
         private void Awake() 
         {
-            if (_instance != null) 
+            if (_instance != null && _instance != this) 
             {
                 Destroy(gameObject);
                 return;
@@ -27,21 +27,25 @@ namespace Project.Scenes.Managers
             
             _instance = this;
             DontDestroyOnLoad(gameObject);
-            SubscribeToEvents();
+            InitializeNavigationEvents();
         }
 
-        private void SubscribeToEvents() 
+        private void InitializeNavigationEvents() 
         {
-            EventManager.Instance.Subscribe<NavigationEventType>(
-                NavigationEventType.ToGame,
-                HandleNavigation
-            );
+            var eventManager = EventManager.Instance;
+            eventManager.Subscribe(NavigationEventType.ToMainMenu, () => LoadScene("MainMenu"));
+            eventManager.Subscribe(NavigationEventType.ToGame, () => LoadScene("Game"));
+            eventManager.Subscribe(NavigationEventType.ToLogin, () => LoadScene("Login"));
+            eventManager.Subscribe(NavigationEventType.ToRegister, () => LoadScene("Register"));
         }
 
-        private void HandleNavigation(NavigationEventType navEvent) 
+        private void LoadScene(string sceneName) 
         {
-            var sceneName = navEvent.ToString()[2..]; // Using range operator instead of Substring
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+            EventManager.Instance.TriggerEvent(GameEventType.SceneLoaded);
         }
+
+        public string GetCurrentScene() => 
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
     }
 }

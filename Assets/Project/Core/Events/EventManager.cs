@@ -7,78 +7,50 @@ namespace Project.Core.Events
     public class EventManager : MonoBehaviour
     {
         private static EventManager _instance;
-        public static EventManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    var go = new GameObject("GameEventManager");
-                    _instance = go.AddComponent<EventManager>();
-                    DontDestroyOnLoad(go);
-                }
-                return _instance;
-            }
-        }
+        public static EventManager Instance => _instance ??= CreateInstance();
 
-        private Dictionary<Enum, Action> _events;
-        private Dictionary<Enum, Action<object>> _eventsWithData;
+        private readonly Dictionary<Enum, Delegate> _events = new();
+
+        private static EventManager CreateInstance()
+        {
+            var go = new GameObject("EventManager");
+            _instance = go.AddComponent<EventManager>();
+            DontDestroyOnLoad(go);
+            return _instance;
+        }
 
         private void Awake()
         {
-            if (_instance != null)
+            if (_instance != null && _instance != this)
             {
                 Destroy(gameObject);
                 return;
             }
             
             _instance = this;
-            InitializeEventSystem();
             DontDestroyOnLoad(gameObject);
         }
 
-        private void InitializeEventSystem()
-        {
-            _events = new Dictionary<Enum, Action>();
-            _eventsWithData = new Dictionary<Enum, Action<object>>();
-        }
-
-        public void Subscribe(Enum eventType, Action listener)
+        public void Subscribe<T>(T eventType, Action handler) where T : Enum
         {
             if (!_events.ContainsKey(eventType))
-                _events[eventType] = null;
-            _events[eventType] += listener;
+            {
+                _events[eventType] = handler;
+                return;
+            }
+            _events[eventType] = Delegate.Combine(_events[eventType], handler);
         }
 
-        public void Subscribe<T>(Enum eventType, Action<T> listener)
+        public void Unsubscribe<T>(T eventType, Action handler) where T : Enum
         {
-            if (!_eventsWithData.ContainsKey(eventType))
-                _eventsWithData[eventType] = null;
-            _eventsWithData[eventType] += (data) => listener((T)data);
+            if (!_events.ContainsKey(eventType)) return;
+            _events[eventType] = Delegate.Remove(_events[eventType], handler);
         }
 
-        public void Unsubscribe(Enum eventType, Action listener)
+        public void TriggerEvent<T>(T eventType) where T : Enum
         {
-            if (_events.ContainsKey(eventType))
-                _events[eventType] -= listener;
-        }
-
-        public void Unsubscribe<T>(Enum eventType, Action<T> listener)
-        {
-            if (_eventsWithData.ContainsKey(eventType))
-                _eventsWithData[eventType] -= (data) => listener((T)data);
-        }
-
-        public void TriggerEvent(Enum eventType)
-        {
-            if (_events.ContainsKey(eventType))
-                _events[eventType]?.Invoke();
-        }
-
-        public void TriggerEvent<T>(Enum eventType, T data)
-        {
-            if (_eventsWithData.ContainsKey(eventType))
-                _eventsWithData[eventType]?.Invoke(data);
+            if (!_events.ContainsKey(eventType)) return;
+            (_events[eventType] as Action)?.Invoke();
         }
     }
 }
