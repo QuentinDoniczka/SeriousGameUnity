@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Project/Scenes/Menu/MainMenu.unity
     guid: 0aab3e7d3210d6346ae76a4ee2934d24
+  - enabled: 1
+    path: Assets/Project/Scenes/Auth/Register.unity
+    guid: a4366afbb32382e429a9b99811e6f04c
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: 00e4a3ebfe2d52f4c808e10268606175, type: 2}
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 8595344fbcb744941acee58bef581871, type: 2}

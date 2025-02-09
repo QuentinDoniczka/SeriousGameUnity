@@ -1,25 +1,50 @@
-# Structure du Projet Unity - SQL Game
+# Structure du Projet Unity
 
 ```
 Assets/
 │
-├── _Project/                   
+├── Project/                   
+│   ├── Api/                                # Tout ce qui concerne les APIs
+│   │   ├── ApiServiceManager.cs            # Gestionnaire des services API
+│   │   ├── ApiConfig.cs                    # Config API
+│   │   │
+│   │   ├── Constants/                      # Constantes API
+│   │   │   └── ValidationMessages.cs       # Messages de validation
+│   │   │
+│   │   ├── Validators/                     # Validations des APIs
+│   │   │   ├── IApiValidator.cs            # Interface de validation
+│   │   │   ├── UserNameValidator.cs        # Validation de nom d'utilisateur
+│   │   │   ├── EmailValidator.cs           # Validation d'email
+│   │   │   └── PasswordValidator.cs        # Validation de mot de passe
+│   │   │
+│   │   ├── Models/                         # DTOs
+│   │   │   ├── Validators/                 # Validations des modèles
+│   │   │   │   ├── IValidator.cs           # Interface de validation
+│   │   │       ├── ValidationResult.cs     # Résultat de validation
+│   │   │   │   ├── LoginValidator.cs       # Validation de login
+│   │   │   │   └── RegisterValidator.cs    # Validation d'inscription
+│   │   │   │
+│   │   │   ├── Requests/                   # Modèles pour les requêtes API
+│   │   │   │   ├── LoginRequest.cs
+│   │   │   │   └── RegisterRequest.cs
+│   │   │   │
+│   │   │   └── Responses/                  # Modèles pour les réponses API
+│   │   │       ├── LoginResponse.cs
+│   │   │       └── RegisterResponse.cs
+│   │   │
+│   │   └── User/                           # Services API utilisateur
+│   │       ├── IUserApiService.cs 
+│   │       └── UserApiService.cs
 │   │
-│   ├── Core/                           # Core systems
-│   │   ├── CoreManager.cs              # Manager principal persistant
-│   │   ├── Services/                   # Services system
-│   │   │   └── ServiceManager.cs       # Central service manager
+│   ├── Core/                               # Core systems
+│   │   ├── CoreManager.cs                  # Manager principal persistant
 │   │   │
-│   │   ├── Auth/                   # logique d'auth
-│   │   │   ├── AuthManager.cs      # Gestion de l'authentification
-│   │   │   ├── UserSession.cs      # Gestion de la session utilisateur
-│   │   │   └── Models/
-│   │   │       └── UserModel.cs    # Modèle de données utilisateur
+│   │   ├── Services/                       # Services system
+│   │   │   └── ServiceManager.cs           # Central service manager
 │   │   │
-│   │   
-│   │   └── Events/                     # Système d'events
-│   │       ├── GameEventManager.cs     # Gestionnaire des events (Observer pattern)
-│   │       └── GameEvents.cs           # Définition des events
+│   │   └── Events/                         # Système d'events
+│   │       ├── GameEventManager.cs         # Gestionnaire des events
+│   │       └── GameEvents.cs               # Définition des events
 │   │
 │   ├── Database/               
 │   │   ├── Models/                    
@@ -32,53 +57,53 @@ Assets/
 │   │   ├── SQLManager.cs             
 │   │   └── QueryValidator.cs         
 │   │
-│   ├── Game/           # Logique de jeu
+    │   ├── Game/                           # Logique de jeu
 │   │   └── Managers/
-│   │       ├── GameManager.cs   # Manager principal
+│   │       ├── GameManager.cs              # Manager principal
 │   │
-│   ├── UI/                     # Interface utilisateur
+│   ├── UI/                                 # Interface utilisateur
 │   │   ├── SQLInput/
-│   │   │   ├── SQLInputField.cs     # Champ de saisie SQL
-│   │   │   └── SQLSuggestions.cs    # Auto-complétion
+│   │   │   ├── SQLInputField.cs            # Champ de saisie SQL
+│   │   │   └── SQLSuggestions.cs           # Auto-complétion
 │   │   │
 │   │   ├── HUD/
-│   │   │   ├── UnitDisplay.cs       # Affichage des unités
-│   │   │   └── StatusPanel.cs       # État du jeu
+│   │   │   ├── UnitDisplay.cs              # Affichage des unités
+│   │   │   └── StatusPanel.cs              # État du jeu
 │   │   │
 │   │   ├── Prefabs/
-│   │   │   ├── UIElements/          # Éléments d'interface
-│   │   │   └── Windows/             # Fenêtres du jeu
+│   │   │   ├── UIElements/                 # Éléments d'interface
+│   │   │   └── Windows/                    # Fenêtres du jeu
 │   │   │
-│   │   └── Auth/                    # Nouveau dossier pour les UI d'auth
-│   │       ├── LoginPanel.cs        # Panel de login
-│   │       ├── LoginForm.cs         # Formulaire de login
-│   │       ├── RegisterPanel.cs     # Panel d'inscription
-│   │       └── RegisterForm.cs      # Formulaire d'inscription
+│   │   └── Auth/                           # Nouveau dossier pour les UI d'auth
+│   │       ├── LoginPanel.cs               # Panel de login
+│   │       ├── LoginForm.cs                # Formulaire de login
+│   │       ├── RegisterPanel.cs            # Panel d'inscription
+│   │       └── RegisterForm.cs             # Formulaire d'inscription
 │   │    
-│   └── Scenes/                      # Navigation et scènes
+│   └── Scenes/                             # Navigation et scènes
 │       ├── Managers/
-│       │   └── SceneManager.cs      # Gestion de la navigation entre scènes
+│       │   └── SceneManager.cs             # Gestion de la navigation entre scènes
 │       │
-│       ├── Boot/                    # Scènes de démarrage
+│       ├── Boot/                           # Scènes de démarrage
 │       │   └── Logo.unity
 │       │
-│       ├── Menu/                    # Scènes de menus
+│       ├── Menu/                           # Scènes de menus
 │       │   └── MainMenu.unity
 │       │
-│       ├── Auth/                    # Nouveau dossier pour l'authentification
-│       │   ├── Login.unity         # Scène de connexion
-│       │   └── Register.unity      # Scène d'inscription
+│       ├── Auth/                           # Nouveau dossier pour l'authentification
+│       │   ├── Login.unity                 # Scène de connexion
+│       │   └── Register.unity              # Scène d'inscription
 │       │
-│       └── Levels/                  # Niveaux de jeu
+│       └── Levels/                         # Niveaux de jeu
 │           ├── Level_01.unity
 │           └── Level_02.unity
 │
-├── Resources/                  # Assets chargés dynamiquement
-│   └── LevelData/             # Données des niveaux
-│       └── level_test.json    # Fichier de test initial
+├── Resources/                              # Assets chargés dynamiquement
+│   └── LevelData/                          # Données des niveaux
+│       └── level_test.json                 # Fichier de test initial
 │
-└── Plugins/                   # Plugins externes
-   └── SQLite/               # DLL SQLite pour Unity
+└── Plugins/                                # Plugins externes
+   └── SQLite/                              # DLL SQLite pour Unity
        └── Mono.Data.Sqlite.dll
 
 on oublira pas l'intégration de paterne comme le patern observation

@@ -1,11 +1,10 @@
+// UI/Auth/LoginPanel.cs
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Project.Core.Events;
-using System.Text;
-using UnityEngine.Networking;
-using System.Threading.Tasks;
-using Project.Models;
+using Project.Api;
+using Project.Api.Models.Requests;
 
 namespace Project.UI.Auth
 {
@@ -17,15 +16,7 @@ namespace Project.UI.Auth
         [SerializeField] private Button loginButton;
         [SerializeField] private Button registerButton;
 
-        private const string API_URL = "http://localhost:5000/api/user/login";
         private EventManager _eventManager;
-
-        [System.Serializable]
-        private class LoginRequestData
-        {
-            public string email;
-            public string password;
-        }
 
         private void Awake() => _eventManager = EventManager.Instance;
 
@@ -66,7 +57,13 @@ namespace Project.UI.Auth
             
             try 
             {
-                var response = await SendLoginRequest();
+                var request = new LoginRequest
+                {
+                    Email = emailInput.text.Trim(),
+                    Password = passwordInput.text
+                };
+
+                var response = await ApiServiceManager.Instance.UserService.Login(request);
                 if (response != null)
                 {
                     ClearError();
@@ -81,36 +78,6 @@ namespace Project.UI.Auth
             {
                 loginButton.interactable = true;
             }
-        }
-
-        private async Task<LoginResponse> SendLoginRequest()
-        {
-            var loginData = new LoginRequestData 
-            { 
-                email = emailInput.text.Trim(),
-                password = passwordInput.text
-            };
-
-            using var request = new UnityWebRequest(API_URL, "POST");
-            var bodyRaw = Encoding.UTF8.GetBytes(JsonUtility.ToJson(loginData));
-            
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            await request.SendWebRequest();
-
-            if (request.responseCode == 400)
-            {
-                throw new System.Exception("Invalid credentials");
-            }
-
-            if (request.result != UnityWebRequest.Result.Success)
-            {
-                throw new System.Exception("Network error, please try again");
-            }
-
-            return JsonUtility.FromJson<LoginResponse>(request.downloadHandler.text);
         }
 
         private void HandleRegister()
