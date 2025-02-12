@@ -48,5 +48,5 @@ on aura un visuel de chaque commande qu'on tapera aux fur et a mesure, avec un f
 ## Prototype visuel ou croquis
 
 Sans parler de prototype, le visuel serra assez souvent le meme,
-l'écran serra découpé en deux parti, la parti basse pour les commande a effectuer,
-et le haut de l'écran pour avoir un rendu visuel en directe sur les commandes effectuer
+l'écran serra découpé en deux partis, la partie basse pour les commandes à effectuer,
+et le haut de l'écran pour avoir un rendu visuel en directe sur les commandes effectuer.
