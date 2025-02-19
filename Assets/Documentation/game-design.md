@@ -44,14 +44,21 @@ VisuaLogic est un Serious Game innovant qui transforme l'apprentissage de concep
   - Système de progression par niveau de difficulté
   - Récompenses visuelles immédiates lors de la réussite d'exercices
 
+
 ### 2.3 Mesure de Succès
 - Indicateurs clés :
   - Nombre d'exercices résolus correctement
-  - Temps passé sur chaque concept avant sa maîtrise
-  - A COMPLETER
+  - Temps passé par concept avant maîtrise
+  - Taux de réussite par type de requête SQL
+  - Nombre de tentatives avant réussite
+  - Temps de réflexion moyen par type d'exercice
+  - Utilisation des aides contextuelles
 - Impact attendu :
-  - Meilleure compréhension des concepts abstraits
-  - A COMPLETER
+  - Meilleure compréhension des concepts abstraits (mesurable par les tests)
+  - Réduction du temps d'apprentissage des concepts SQL
+  - Augmentation du taux de rétention des connaissances
+  - Amélioration de la confiance dans l'utilisation de SQL
+  - Capacité à résoudre des problèmes complexes de manière autonome
 
 #### Exemple Type Serious Game
 - Mission typique :
@@ -123,15 +130,23 @@ VisuaLogic est un Serious Game innovant qui transforme l'apprentissage de concep
   - Résolution d'équations mathématiques via des représentations concrètes
 
 ### 4.2 Mécaniques Principales
-- Interaction avec les visualisations :
-  - Manipulation directe des éléments visuels (soldats, balances)
-  - Observation en temps réel des effets des commandes
-- Saisie de commandes :
-  - Interface de saisie SQL avec suggestions et auto-complétion
-  - Validation immédiate avec retour visuel
-- Résolution de problèmes :
-  - Manipulation des éléments pour atteindre un objectif donné
-  - Possibilité de tester différentes approches
+- Système de commandes SQL :
+  - Éditeur de requêtes avec coloration syntaxique
+  - Auto-complétion intelligente des mots-clés SQL
+  - Historique des requêtes précédentes
+  - Templates de requêtes courantes
+
+- Système de visualisation :
+  - Animations fluides des mouvements de troupes
+  - Codes couleurs pour différencier les types d'unités
+  - Indicateurs visuels pour les conditions (WHERE)
+  - Visualisation des jointures par liens physiques
+
+- Système d'aide :
+  - Aide contextuelle selon le type de requête
+  - Suggestions basées sur les erreurs communes
+  - Guide visuel pas à pas pour les nouveaux concepts
+  - Détection automatique des erreurs de syntaxe
 
 ### 4.3 Progression
 - Système de niveaux :
