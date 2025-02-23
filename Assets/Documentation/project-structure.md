@@ -11,6 +11,9 @@ Assets/
 │   │   ├── Constants/                      # Constantes API
 │   │   │   └── ValidationMessages.cs       # Messages de validation
 │   │   │
+│   │   ├── Endpoints/                      # Endpoints API
+│   │   │   └── UserApiEndpoints.cs         # Endpoints utilisateur
+│   │   │
 │   │   ├── Validators/                     # Validations des APIs
 │   │   │   ├── IApiValidator.cs            # Interface de validation
 │   │   │   ├── UserNameValidator.cs        # Validation de nom d'utilisateur
@@ -29,8 +32,8 @@ Assets/
 │   │   │   │   └── RegisterRequest.cs
 │   │   │   │
 │   │   │   └── Responses/                  # Modèles pour les réponses API
-│   │   │       ├── LoginResponse.cs
-│   │   │       └── RegisterResponse.cs
+│   │   │       ├── LoginResponse.cs        # Réponse de login
+│   │   │       └── RegisterResponse.cs     # Réponse d'inscription
 │   │   │
 │   │   └── User/                           # Services API utilisateur
 │   │       ├── IUserApiService.cs 

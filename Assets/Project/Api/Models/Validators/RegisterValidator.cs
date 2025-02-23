@@ -12,7 +12,7 @@ namespace Project.Api.Models.Validators
             ValidateUsername(model.Username, result);
             ValidateEmail(model.Email, result);
             ValidatePassword(model.Password, result);
-
+    
             return result;
         }
 

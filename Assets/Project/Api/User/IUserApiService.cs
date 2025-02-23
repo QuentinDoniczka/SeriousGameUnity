@@ -8,5 +8,6 @@ namespace Project.Api.User
     public interface IUserApiService
     {
         Task<LoginResponse> Login(LoginRequest request);
+        Task<RegisterResponse> Register(RegisterRequest request);
     }
 }
