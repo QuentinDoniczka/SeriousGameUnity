@@ -13,6 +13,8 @@ namespace Project.Core.Events
         ToLogin,
         ToRegister,
         ToGame,
-        ToMainMenu
+        ToMainMenu,
+        ToSqlMenu,
+        ToSqlTest
     }
 }

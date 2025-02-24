@@ -9,9 +9,9 @@ namespace Project.Api.Models.Validators
         {
             var result = new ValidationResult();
 
-            ValidateUsername(model.Username, result);
-            ValidateEmail(model.Email, result);
-            ValidatePassword(model.Password, result);
+            ValidateUsername(model.username, result);
+            ValidateEmail(model.email, result);
+            ValidatePassword(model.password, result);
     
             return result;
         }

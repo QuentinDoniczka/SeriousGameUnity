@@ -1,9 +1,12 @@
-﻿namespace Project.Api.Models.Requests
+﻿using System;
+
+namespace Project.Api.Models.Requests
 {
+    [Serializable]
     public class RegisterRequest
     {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string username;
+        public string email;
+        public string password;
     }
 }

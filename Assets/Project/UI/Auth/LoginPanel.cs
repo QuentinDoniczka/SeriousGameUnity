@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Project.Core.Events;
-using Project.Api;
+using Project.Api.User;
 using Project.Api.Models.Requests;
 
 namespace Project.UI.Auth
@@ -17,6 +17,7 @@ namespace Project.UI.Auth
         [SerializeField] private Button registerButton;
 
         private EventManager _eventManager;
+        private IUserApiService _userApiService;
 
         private void Awake() => _eventManager = EventManager.Instance;
 
@@ -24,6 +25,7 @@ namespace Project.UI.Auth
         {
             if (!ValidateComponents()) return;
             
+            _userApiService = new UserApiService();
             loginButton.onClick.AddListener(HandleLogin);
             registerButton.onClick.AddListener(HandleRegister);
             ClearError();
@@ -47,32 +49,51 @@ namespace Project.UI.Auth
 
         private async void HandleLogin()
         {
+            ClearError();
             if (!ValidateInputs())
             {
                 ShowError("Email and password are required");
                 return;
             }
 
-            loginButton.interactable = false;
-            
-            try 
+            try
             {
+                loginButton.interactable = false;
+        
                 var request = new LoginRequest
                 {
-                    Email = emailInput.text.Trim(),
-                    Password = passwordInput.text
+                    email = emailInput.text.Trim(),
+                    password = passwordInput.text
                 };
-
-                var response = await ApiServiceManager.Instance.UserService.Login(request);
-                if (response != null)
+        
+                var response = await _userApiService.Login(request);
+        
+                // Vérifier si la réponse de l'API est valide
+                if (response != null && !string.IsNullOrEmpty(response.Token))
                 {
-                    ClearError();
-                    _eventManager?.TriggerEvent(NavigationEventType.ToMainMenu);
+                    // Log the successful response
+                    Debug.Log($"Login successful for: {response.Email}");
+                    Debug.Log($"Username: {response.Username}");
+                    Debug.Log($"Token: {response.Token}");
+                    Debug.Log($"Expiration: {response.Expiration}");
+            
+                    // You might want to store the token for future API calls
+                    // PlayerPrefs.SetString("AuthToken", response.Token);
+            
+                    // Navigate to the main menu ONLY after successful login
+                    _eventManager.TriggerEvent(NavigationEventType.ToMainMenu);
+                }
+                else
+                {
+                    // Si la réponse est nulle ou le token est vide, c'est une erreur
+                    Debug.LogError("Login failed: Invalid response from server");
+                    ShowError("Login failed. Please check your credentials and try again.");
                 }
             }
             catch (System.Exception e)
             {
-                ShowError(e.Message);
+                Debug.LogError($"Login error: {e.Message}");
+                ShowError("Login failed. Please check your credentials and try again.");
             }
             finally
             {

@@ -65,17 +65,21 @@ Assets/
 │   │       ├── GameManager.cs              # Manager principal
 │   │
 │   ├── UI/                                 # Interface utilisateur
-│   │   ├── SQLInput/
-│   │   │   ├── SQLInputField.cs            # Champ de saisie SQL
-│   │   │   └── SQLSuggestions.cs           # Auto-complétion
-│   │   │
 │   │   ├── HUD/
-│   │   │   ├── UnitDisplay.cs              # Affichage des unités
-│   │   │   └── StatusPanel.cs              # État du jeu
+│   │   │   ├── HUD_SQL_Manager.cs          # Gestionnaire global du HUD SQL
+│   │   │   └── SQLQueryData.cs             # Structure de données pour les requêtes SQL
 │   │   │
-│   │   ├── Prefabs/
-│   │   │   ├── UIElements/                 # Éléments d'interface
-│   │   │   └── Windows/                    # Fenêtres du jeu
+│   │   ├── Assets/                         # Ressources UI Toolkit communes
+│   │   │   ├── SQL/                        # UI pour SQL spécifiquement
+│   │   │   │   ├── SqlHUD.uxml             # Structure UI du HUD SQL 
+│   │   │   │   └── SqlHUD.uss              # Styles du HUD SQL
+│   │   │   │
+│   │   │   └── Common/                     # UI communes réutilisables
+│   │   │       ├── CommonStyles.uss        # Styles communs
+│   │   │       └── ComponentTemplates.uxml # Composants réutilisables
+│   │   │
+│   │   ├── SQL/                            # dossier pour les UI SQL
+│   │   │   └── SQLTestPanel.cs             # Panel SQL
 │   │   │
 │   │   └── Auth/                           # Nouveau dossier pour les UI d'auth
 │   │       ├── LoginPanel.cs               # Panel de login
@@ -98,12 +102,13 @@ Assets/
 │       │   └── Register.unity              # Scène d'inscription
 │       │
 │       └── Levels/                         # Niveaux de jeu
-│           ├── Level_01.unity
-│           └── Level_02.unity
+│           └── Sql.unity                   # Niveau SQL
 │
 ├── Resources/                              # Assets chargés dynamiquement
 │   └── LevelData/                          # Données des niveaux
-│       └── level_test.json                 # Fichier de test initial
+│       └── Sql/                            # Données du niveau SQL
+│           ├── SqlTestLevelData.json       # Données du niveau de test SQL
+│           └── SqlLevelData.json
 │
 └── Plugins/                                # Plugins externes
    └── SQLite/                              # DLL SQLite pour Unity
