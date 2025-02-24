@@ -3,28 +3,33 @@ using UnityEngine.UI;
 using Project.Core.Events;
 using Project.Api.Models.Validators;
 using Project.Api.Models.Requests;
+using TMPro;
 
 namespace Project.UI.Auth 
 {
     public class RegisterPanel : MonoBehaviour
     {
-        [SerializeField] private InputField usernameInput;
-        [SerializeField] private InputField emailInput;
-        [SerializeField] private InputField passwordInput;
-        [SerializeField] private Text messageText;
+        [SerializeField] private TMP_InputField usernameInput;
+        [SerializeField] private TMP_InputField emailInput;
+        [SerializeField] private TMP_InputField passwordInput;
+        [SerializeField] private TextMeshProUGUI errorText;
         [SerializeField] private Button registerButton;
         [SerializeField] private Button loginButton;
-
         private RegisterValidator _registerValidator;
         private EventManager _eventManager;
 
         private void Start()
         {
-            if (!AreAllComponentsAssigned()) return;
-            
+            if (!AreAllComponentsAssigned()) 
+            {
+                Debug.LogError("All components are not assigned");
+                return;
+            }
             _eventManager = EventManager.Instance;
             _registerValidator = new RegisterValidator();
+            
             InitializeButtons();
+            ClearError();
         }
 
         private void InitializeButtons()
@@ -32,6 +37,8 @@ namespace Project.UI.Auth
             registerButton.onClick.AddListener(ValidateAndRegister);
             loginButton.onClick.AddListener(OnLoginButtonClicked);
         }
+        private void ClearError() => 
+            errorText.gameObject.SetActive(false);
 
         private void ValidateAndRegister()
         {
@@ -40,7 +47,8 @@ namespace Project.UI.Auth
 
             if (validationResult.IsValid)
             {
-                Debug.Log("Validation réussie");
+                Debug.Log("succeded");
+                ClearError();
             }
             else
             {
@@ -48,6 +56,8 @@ namespace Project.UI.Auth
                 {
                     Debug.LogError(error);
                 }
+                errorText.gameObject.SetActive(true);
+                errorText.text = validationResult.Errors[0];
             }
         }
 
@@ -70,7 +80,7 @@ namespace Project.UI.Auth
             usernameInput && 
             emailInput && 
             passwordInput && 
-            messageText && 
+            errorText && 
             registerButton && 
             loginButton;
 
