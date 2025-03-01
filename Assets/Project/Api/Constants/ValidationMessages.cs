@@ -1,4 +1,4 @@
-﻿namespace Project.Api.Constants
+﻿ namespace Project.Api.Constants
 {
     public static class ValidationMessages
     {

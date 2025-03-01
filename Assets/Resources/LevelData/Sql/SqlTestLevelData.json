@@ -1,0 +1,94 @@
+﻿{
+  "tables": {
+    "army": {
+      "columns": {
+        "id": "INTEGER PRIMARY KEY",
+        "name": "TEXT",
+        "faction": "TEXT",
+        "role": "TEXT",
+        "position_x": "REAL",
+        "position_y": "REAL"
+      },
+      "rows": [
+        { "id": 1, "name": "Jacques", "faction": "red", "role": "soldier", "position_x": 1.0, "position_y": 2.0 },
+        { "id": 2, "name": "Marie", "faction": "red", "role": "archer", "position_x": 2.0, "position_y": 3.0 },
+        { "id": 3, "name": "Pierre", "faction": "red", "role": "tank", "position_x": 1.0, "position_y": 1.0 },
+        { "id": 4, "name": "Sophie", "faction": "red", "role": "soldier", "position_x": 2.0, "position_y": 2.0 },
+        { "id": 5, "name": "Antoine", "faction": "red", "role": "archer", "position_x": 3.0, "position_y": 3.0 },
+        { "id": 6, "name": "Thomas", "faction": "blue", "role": "soldier", "position_x": 10.0, "position_y": 12.0 },
+        { "id": 7, "name": "Camille", "faction": "blue", "role": "soldier", "position_x": 11.0, "position_y": 13.0 },
+        { "id": 8, "name": "Lucas", "faction": "blue", "role": "tank", "position_x": 10.0, "position_y": 11.0 },
+        { "id": 9, "name": "Sarah", "faction": "blue", "role": "tank", "position_x": 11.0, "position_y": 12.0 },
+        { "id": 10, "name": "Chloé", "faction": "blue", "role": "archer", "position_x": 9.0, "position_y": 13.0 }
+      ]
+    },
+
+    "stats": {
+      "columns": {
+        "id": "INTEGER PRIMARY KEY",
+        "army_id": "INTEGER",
+        "health": "INTEGER",
+        "attack": "INTEGER",
+        "defense": "INTEGER",
+        "age": "INTEGER",
+        "experience": "INTEGER",
+        "FOREIGN KEY(army_id)": "REFERENCES army(id)"
+      },
+      "rows": [
+        { "id": 1, "army_id": 1, "health": 100, "attack": 15, "defense": 10, "age": 25, "experience": 3 },
+        { "id": 2, "army_id": 2, "health": 85, "attack": 22, "defense": 4, "age": 22, "experience": 2 },
+        { "id": 3, "army_id": 3, "health": 220, "attack": 25, "defense": 30, "age": 35, "experience": 10 },
+        { "id": 4, "army_id": 4, "health": 110, "attack": 14, "defense": 12, "age": 27, "experience": 4 },
+        { "id": 5, "army_id": 5, "health": 75, "attack": 25, "defense": 5, "age": 20, "experience": 1 },
+        { "id": 6, "army_id": 6, "health": 105, "attack": 16, "defense": 9, "age": 26, "experience": 3 },
+        { "id": 7, "army_id": 7, "health": 95, "attack": 18, "defense": 8, "age": 24, "experience": 2 },
+        { "id": 8, "army_id": 8, "health": 190, "attack": 28, "defense": 28, "age": 32, "experience": 8 },
+        { "id": 9, "army_id": 9, "health": 210, "attack": 24, "defense": 32, "age": 34, "experience": 9 },
+        { "id": 10, "army_id": 10, "health": 80, "attack": 30, "defense": 5, "age": 21, "experience": 2 }
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "id": 1,
+      "name": "Trouver les archers",
+      "description": "Récupérer uniquement le nom et le rôle de tous les archers de la faction rouge",
+      "difficulty": "facile",
+      "query": "SELECT name, role FROM army WHERE role = 'archer' AND faction = 'red'",
+      "hint": "Utilisez WHERE pour filtrer par rôle et faction",
+      "expected": [
+        { "name": "Marie", "role": "archer" },
+        { "name": "Antoine", "role": "archer" }
+      ],
+      "allowed_commands": ["SELECT", "FROM", "WHERE"]
+    },
+    {
+      "id": 2,
+      "name": "Les meilleurs attaquants",
+      "description": "Trouver le nom, le rôle et la valeur d'attaque des 3 unités avec la plus forte attaque dans la faction bleue",
+      "difficulty": "moyenne",
+      "query": "SELECT a.name, a.role, s.attack FROM army a JOIN stats s ON a.id = s.army_id WHERE a.faction = 'blue' ORDER BY s.attack DESC LIMIT 3",
+      "hint": "Utilisez JOIN, ORDER BY et LIMIT",
+      "expected": [
+        { "name": "Chloé", "role": "archer", "attack": 30 },
+        { "name": "Lucas", "role": "tank", "attack": 28 },
+        { "name": "Sarah", "role": "tank", "attack": 24 }
+      ],
+      "allowed_commands": ["SELECT", "FROM", "JOIN", "WHERE", "ORDER BY", "LIMIT"]
+    },
+    {
+      "id": 3,
+      "name": "Puissance des unités par rôle",
+      "description": "Calculer la puissance moyenne (attaque + défense) des unités par rôle, en n'affichant que le rôle et la valeur de puissance",
+      "difficulty": "moyenne",
+      "query": "SELECT a.role, AVG(s.attack + s.defense) as puissance_moyenne FROM army a JOIN stats s ON a.id = s.army_id GROUP BY a.role ORDER BY puissance_moyenne DESC",
+      "hint": "Utilisez JOIN, fonctions d'agrégation et GROUP BY pour calculer la moyenne par rôle",
+      "expected": [
+        { "role": "tank", "puissance_moyenne": 54.5 },
+        { "role": "archer", "puissance_moyenne": 28.0 },
+        { "role": "soldier", "puissance_moyenne": 25.25 }
+      ],
+      "allowed_commands": ["SELECT", "FROM", "JOIN", "GROUP BY", "ORDER BY", "AVG"]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+﻿.container {
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.task-name {
+    font-size: 18px;
+    color: white;
+    -unity-font-style: bold;
+    margin-bottom: 10px;
+}
+
+.task-description {
+    font-size: 14px;
+    color: white;
+    margin-bottom: 15px;
+}
+
+.hint {
+    font-size: 14px;
+    color: #ffcc00;
+}
+
+.query-input {
+    background-color: #333;
+    color: white;
+    border-width: 1px;
+    border-color: #555;
+}
+
+.execute-button {
+    background-color: #007acc;
+    color: white;
+    border-radius: 4px;
+    padding: 5px 15px;
+}
+
+.result {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #222;
+    border-radius: 4px;
+}

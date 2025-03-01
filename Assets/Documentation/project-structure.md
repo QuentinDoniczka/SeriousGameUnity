@@ -66,26 +66,21 @@ Assets/
 │   │
 │   ├── UI/                                 # Interface utilisateur
 │   │   ├── HUD/
-│   │   │   ├── HUD_SQL_Manager.cs          # Gestionnaire global du HUD SQL
-│   │   │   └── SQLQueryData.cs             # Structure de données pour les requêtes SQL
-│   │   │
-│   │   ├── Assets/                         # Ressources UI Toolkit communes
-│   │   │   ├── SQL/                        # UI pour SQL spécifiquement
-│   │   │   │   ├── SqlHUD.uxml             # Structure UI du HUD SQL 
-│   │   │   │   └── SqlHUD.uss              # Styles du HUD SQL
-│   │   │   │
-│   │   │   └── Common/                     # UI communes réutilisables
-│   │   │       ├── CommonStyles.uss        # Styles communs
-│   │   │       └── ComponentTemplates.uxml # Composants réutilisables
+│   │   │   ├── HudSqlManager.cs          # Gestionnaire global du HUD SQL
+│   │   │   └── SqlQueryData.cs             # Structure de données pour les requêtes SQL
 │   │   │
 │   │   ├── SQL/                            # dossier pour les UI SQL
-│   │   │   └── SQLTestPanel.cs             # Panel SQL
+│   │   │   ├── SqlPanel.cs                 # Panel SQL
+│   │   │   ├── SqlHud.uxml                 # Structure UI du HUD SQL 
+│   │   │   └── SqlHud.uss                  # Styles du HUD SQL
 │   │   │
+│   │   ├── Menu/                           # Menu
+│   │   │   ├── MainMenuPanel.cs            # Menu principal
+│   │   │   └── SqlMenuPanel.cs             # Menu SQL
+│   │   │   
 │   │   └── Auth/                           # Nouveau dossier pour les UI d'auth
 │   │       ├── LoginPanel.cs               # Panel de login
-│   │       ├── LoginForm.cs                # Formulaire de login
-│   │       ├── RegisterPanel.cs            # Panel d'inscription
-│   │       └── RegisterForm.cs             # Formulaire d'inscription
+│   │       └── RegisterPanel.cs            # Panel d'inscription
 │   │    
 │   └── Scenes/                             # Navigation et scènes
 │       ├── Managers/

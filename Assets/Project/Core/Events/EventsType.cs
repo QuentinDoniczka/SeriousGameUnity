@@ -8,6 +8,12 @@ namespace Project.Core.Events
         GamePaused,
         GameResumed,
     }
+    public enum SqlEventType
+    {
+        LevelSelected,
+        QuerySubmitted,
+        QueryValidated
+    }
     public enum NavigationEventType
     {
         ToLogin,
