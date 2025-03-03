@@ -38,7 +38,7 @@ namespace Project.Scenes.Managers
             eventManager.Subscribe(NavigationEventType.ToLogin, () => LoadScene("Login"));
             eventManager.Subscribe(NavigationEventType.ToRegister, () => LoadScene("Register"));
             eventManager.Subscribe(NavigationEventType.ToSqlMenu, () => LoadScene("SqlMenu"));
-            eventManager.Subscribe(NavigationEventType.ToSqlTest, () => LoadScene("SqlTest"));
+            eventManager.Subscribe(NavigationEventType.ToSqlLevel, () => LoadScene("SqlLevel"));
         }
 
         private void LoadScene(string sceneName) 

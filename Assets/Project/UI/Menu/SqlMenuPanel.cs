@@ -24,12 +24,14 @@ namespace Project.UI.Menu
         
         private void HandleLvlTest()
         {
-            _eventManager.TriggerEvent(NavigationEventType.ToSqlTest);
+            NavigationParameters.SelectedLevelName = "level_test";
+            
+            _eventManager.TriggerEvent(NavigationEventType.ToSqlLevel);
         }
-        
         private void OnDestroy()
         {
             if (returnButton) returnButton.onClick.RemoveAllListeners();
+            if (lvlTestButton) lvlTestButton.onClick.RemoveAllListeners();
         }
     }
 }

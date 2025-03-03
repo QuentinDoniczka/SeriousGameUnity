@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Project/Scenes/Menu/SqlMenu.unity
     guid: da369e61cb829214b81d7fd4e73c14c7
   - enabled: 1
-    path: Assets/Project/Scenes/Level/sql/SqlTest.unity
+    path: Assets/Project/Scenes/Level/sql/SqlLevel.unity
     guid: a2dc44d5178062d4c877e885de5ff680
   m_configObjects:
     com.unity.adaptiveperformance.google.android.provider_settings: {fileID: 11400000, guid: 00e4a3ebfe2d52f4c808e10268606175, type: 2}

@@ -21,6 +21,6 @@ namespace Project.Core.Events
         ToGame,
         ToMainMenu,
         ToSqlMenu,
-        ToSqlTest
+        ToSqlLevel
     }
 }
