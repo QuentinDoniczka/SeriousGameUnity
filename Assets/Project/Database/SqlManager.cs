@@ -3,6 +3,7 @@ using UnityEngine;
 using Mono.Data.Sqlite;
 using System.IO;
 using System.Data;
+using System.Collections.Generic;
 using Project.Database.Services;
 
 namespace Project.Database
@@ -13,6 +14,34 @@ namespace Project.Database
         private JsonSchemaAnalyzer _schemaAnalyzer;
         private SqlTableBuilder _tableBuilder;
         private bool _isInitialized;
+        private string _currentLevelJson;
+
+        [System.Serializable]
+        public class LevelData
+        {
+            public Dictionary<string, TableData> tables;
+            public List<TaskData> tasks;
+        }
+
+        [System.Serializable]
+        public class TableData
+        {
+            public Dictionary<string, string> columns;
+            public List<Dictionary<string, object>> rows;
+        }
+
+        [System.Serializable]
+        public class TaskData
+        {
+            public int id;
+            public string name;
+            public string description;
+            public string difficulty;
+            public string query;
+            public string hint;
+            public List<string> allowed_commands;
+            public List<Dictionary<string, object>> expected;
+        }
 
         private void Awake()
         {
@@ -39,6 +68,27 @@ namespace Project.Database
             }
         }
 
+        public void LoadLevelData(string levelName)
+        {
+            string resourcePath = $"LevelData/{levelName}";
+            TextAsset jsonFile = Resources.Load<TextAsset>(resourcePath);
+
+            if (jsonFile == null)
+            {
+                Debug.LogError($"Failed to load level file: {levelName}");
+                return;
+            }
+
+            try
+            {
+                InitializeDatabaseFromJson(jsonFile.text);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Failed to initialize level data: {e.Message}");
+            }
+        }
+
         public void InitializeDatabaseFromJson(string jsonContent)
         {
             if (!_isInitialized)
@@ -52,6 +102,8 @@ namespace Project.Database
                 Debug.LogError("JSON content is empty");
                 return;
             }
+
+            _currentLevelJson = jsonContent;
 
             try
             {
@@ -70,6 +122,25 @@ namespace Project.Database
                 {
                     _connection.Close();
                 }
+            }
+        }
+
+        public LevelData GetCurrentLevelData()
+        {
+            if (string.IsNullOrEmpty(_currentLevelJson))
+            {
+                Debug.LogError("No level data loaded");
+                return null;
+            }
+    
+            try
+            {
+                return JsonUtility.FromJson<LevelData>(_currentLevelJson);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Error parsing level data: {e.Message}");
+                return null;
             }
         }
 
@@ -105,39 +176,6 @@ namespace Project.Database
                 {
                     _connection.Close();
                 }
-            }
-        }
-        public void DebugAllTables()
-        {
-            string[] tableNames = { "blue_army", "red_army" };
-    
-            foreach (string tableName in tableNames)
-            {
-                Debug.Log($"\nContenu de la table {tableName}:");
-                ExecuteQuery(
-                    $"SELECT * FROM {tableName}",
-                    reader =>
-                    {
-                        // Afficher les noms des colonnes
-                        string columns = "";
-                        for (int i = 0; i < reader.FieldCount; i++)
-                        {
-                            columns += reader.GetName(i) + " | ";
-                        }
-                        Debug.Log($"Colonnes: {columns}");
-
-                        // Afficher les données
-                        while (reader.Read())
-                        {
-                            string rowData = "";
-                            for (int i = 0; i < reader.FieldCount; i++)
-                            {
-                                rowData += $"{reader.GetName(i)}: {reader[i]} | ";
-                            }
-                            Debug.Log(rowData);
-                        }
-                    }
-                );
             }
         }
 

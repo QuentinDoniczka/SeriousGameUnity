@@ -69,7 +69,7 @@ namespace Project.Game.Managers
         {
             try
             {
-                ServiceManager.Instance.Sql.DebugAllTables();
+                //ServiceManager.Instance.Sql.DebugAllTables();
             }
             catch (System.Exception e)
             {
