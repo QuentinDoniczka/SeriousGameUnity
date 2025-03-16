@@ -1,15 +1,18 @@
 ﻿<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:VisualElement name="container" style="flex-grow: 1; padding: 20px;">
-        <ui:Label name="task-name" text="Nom de la tâche" style="font-size: 20px; -unity-font-style: bold; margin-bottom: 10px;" />
-        <ui:Label name="task-description" text="Description de la tâche" style="margin-bottom: 15px;" />
-        <ui:TextField name="query-input" multiline="true" style="height: 100px; margin-bottom: 10px;" />
-        <ui:Button name="execute-button" text="Exécuter" style="width: 100px; align-self: flex-end;" />
-        <ui:VisualElement name="result-container" style="margin-top: 20px;">
-            <ui:Label name="result" text="" />
+    <ui:VisualElement name="container" class="container">
+        <ui:Label name="task-name" class="task-name" text="Nom de la tâche" />
+        <ui:Label name="task-description" class="task-description" text="Description de la tâche" />
+
+        <ui:TextField name="query-input" class="query-input" multiline="true" />
+        <ui:Button name="execute-button" class="execute-button" text="Exécuter" />
+
+        <ui:VisualElement name="result-container" class="result-container">
+            <ui:Label name="result" class="result" text="" />
         </ui:VisualElement>
-        <ui:VisualElement name="hint-container" style="margin-top: 15px;">
-            <ui:Label text="Indice:" style="-unity-font-style: bold;" />
-            <ui:Label name="hint" text="" />
+
+        <ui:VisualElement name="hint-container" class="hint-container">
+            <ui:Label text="Indice:" class="hint-label" />
+            <ui:Label name="hint" class="hint" text="" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

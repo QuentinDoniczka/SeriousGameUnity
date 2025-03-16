@@ -1,8 +1,6 @@
-﻿// Project/UI/HUD/HUD_SQL_Manager.cs
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Project.Core.Events;
 using Project.Core.Service;
-using Project.Database;
 using UnityEngine;
 
 namespace Project.UI.HUD
@@ -16,7 +14,7 @@ namespace Project.UI.HUD
 
         private static HudSqlManager CreateInstance()
         {
-            var go = new GameObject("HUD_SQL_Manager");
+            var go = new GameObject("HudSqlManager");
             _instance = go.AddComponent<HudSqlManager>();
             DontDestroyOnLoad(go);
             return _instance;
@@ -38,11 +36,21 @@ namespace Project.UI.HUD
         private void InitializeHUDManager()
         {
             EventManager.Instance.Subscribe(SqlEventType.LevelSelected, OnLevelSelected);
+            EventManager.Instance.Subscribe(GameEventType.SceneLoaded, OnSceneLoaded);
         }
 
         private void OnDestroy()
         {
             EventManager.Instance.Unsubscribe(SqlEventType.LevelSelected, OnLevelSelected);
+            EventManager.Instance.Unsubscribe(GameEventType.SceneLoaded, OnSceneLoaded);
+        }
+        
+        private void OnSceneLoaded()
+        {
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "SqlLevel")
+            {
+                EventManager.Instance.TriggerEvent(SqlEventType.LevelSelected);
+            }
         }
 
         private void OnLevelSelected()
@@ -54,9 +62,7 @@ namespace Project.UI.HUD
         {
             _currentTask = null;
             
-            var sqlManager = ServiceManager.Instance.Sql;
-            var levelData = sqlManager.GetCurrentLevelData();
-            
+            var levelData = ServiceManager.Instance.Sql.GetCurrentLevelData();
             if (levelData != null && levelData.tasks != null && levelData.tasks.Count > 0)
             {
                 var task = levelData.tasks[0]; // On prend uniquement la première tâche
@@ -68,7 +74,7 @@ namespace Project.UI.HUD
                     task.description,
                     task.difficulty,
                     task.hint,
-                    task.allowed_commands
+                    task.allowedCommands
                 );
                 
                 EventManager.Instance.TriggerEvent(SqlEventType.QueryValidated);

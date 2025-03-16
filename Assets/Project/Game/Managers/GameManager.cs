@@ -1,27 +1,24 @@
 // _Project/Game/Managers/GameManager.cs
 using UnityEngine;
 using Project.Core.Service;
+using Project.Core.Events;
 
 namespace Project.Game.Managers
 {
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private string initialLevelName = "level_test";
-        [SerializeField] private string levelQueriesPath = "LevelData";
+        [SerializeField] private string levelQueriesPath = "LevelData/Sql";
 
         private static GameManager _instance;
-        public static GameManager Instance
+        public static GameManager Instance => _instance ??= CreateInstance();
+
+        private static GameManager CreateInstance()
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("GameManager");
-                    _instance = go.AddComponent<GameManager>();
-                    DontDestroyOnLoad(go);
-                }
-                return _instance;
-            }
+            var go = new GameObject("GameManager");
+            _instance = go.AddComponent<GameManager>();
+            DontDestroyOnLoad(go);
+            return _instance;
         }
 
         private void Awake()
@@ -30,21 +27,30 @@ namespace Project.Game.Managers
             {
                 _instance = this;
                 DontDestroyOnLoad(gameObject);
-                InitializeGame();
+                RegisterEventListeners();
             }
             else
             {
                 Destroy(gameObject);
             }
         }
-
-        private void InitializeGame()
+        
+        private void RegisterEventListeners()
         {
-            LoadLevel(initialLevelName);
-            DebugCurrentLevelData();
+            EventManager.Instance.Subscribe(NavigationEventType.ToSqlLevel, OnNavigateToSqlLevel);
+        }
+        
+        private void OnDestroy()
+        {
+            EventManager.Instance.Unsubscribe(NavigationEventType.ToSqlLevel, OnNavigateToSqlLevel);
+        }
+        
+        private void OnNavigateToSqlLevel()
+        {
+            LoadLevel(NavigationParameters.SelectedLevelName ?? initialLevelName);
         }
 
-        private void LoadLevel(string levelName)
+        public void LoadLevel(string levelName)
         {
             string resourcePath = $"{levelQueriesPath}/{levelName}";
             TextAsset jsonFile = Resources.Load<TextAsset>(resourcePath);
@@ -58,6 +64,7 @@ namespace Project.Game.Managers
             try
             {
                 ServiceManager.Instance.Sql.InitializeDatabaseFromJson(jsonFile.text);
+                DebugCurrentLevelData();
             }
             catch (System.Exception e)
             {

@@ -18,6 +18,11 @@ namespace Project.UI.SQL
         private void OnEnable()
         {
             _document = GetComponent<UIDocument>();
+            if (_document == null)
+            {
+                Debug.LogError("UIDocument component not found");
+                return;
+            }
             
             var root = _document.rootVisualElement;
             _queryInput = root.Q<TextField>("query-input");
@@ -27,7 +32,10 @@ namespace Project.UI.SQL
             _hintLabel = root.Q<Label>("hint");
             _resultLabel = root.Q<Label>("result");
             
-            _executeButton.clicked += OnExecuteClicked;
+            if (_executeButton != null)
+            {
+                _executeButton.clicked += OnExecuteClicked;
+            }
             
             EventManager.Instance.Subscribe(SqlEventType.QueryValidated, OnQueryValidated);
             UpdateUI();
@@ -35,7 +43,11 @@ namespace Project.UI.SQL
         
         private void OnDisable()
         {
-            _executeButton.clicked -= OnExecuteClicked;
+            if (_executeButton != null)
+            {
+                _executeButton.clicked -= OnExecuteClicked;
+            }
+            
             EventManager.Instance.Unsubscribe(SqlEventType.QueryValidated, OnQueryValidated);
         }
         
@@ -44,26 +56,29 @@ namespace Project.UI.SQL
             var currentTask = HudSqlManager.Instance.GetCurrentTask();
             if (currentTask == null) return;
             
-            _taskNameLabel.text = currentTask.TaskName;
-            _taskDescriptionLabel.text = currentTask.TaskDescription;
-            _hintLabel.text = currentTask.Hint;
+            if (_taskNameLabel != null)
+                _taskNameLabel.text = currentTask.TaskName;
+                
+            if (_taskDescriptionLabel != null)
+                _taskDescriptionLabel.text = currentTask.TaskDescription;
+                
+            if (_hintLabel != null)
+                _hintLabel.text = currentTask.Hint;
         }
         
         private void OnExecuteClicked()
         {
+            if (_queryInput == null) return;
+            
             var query = _queryInput.value;
-            EventManager.Instance.Subscribe(SqlEventType.QuerySubmitted, OnQuerySubmitted);
-            // TODO: Envoyer la requête au SqlManager et afficher le résultat
+            if (string.IsNullOrEmpty(query)) return;
+            
+            HudSqlManager.Instance.SubmitQuery(query);
         }
         
         private void OnQueryValidated()
         {
             UpdateUI();
-        }
-        
-        private void OnQuerySubmitted()
-        {
-            // TODO: Afficher le résultat de la requête
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿.container {
+    flex-grow: 1;
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.8);
 }
@@ -16,28 +17,56 @@
     margin-bottom: 15px;
 }
 
-.hint {
-    font-size: 14px;
-    color: #ffcc00;
-}
-
 .query-input {
-    background-color: #333;
-    color: white;
+    background-color: #1E1E1E;
+    color: #DCDCDC;
     border-width: 1px;
-    border-color: #555;
+    border-color: #3E3E3E;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+    min-height: 100px;
 }
 
 .execute-button {
-    background-color: #007acc;
+    background-color: #0078D7;
     color: white;
     border-radius: 4px;
-    padding: 5px 15px;
+    padding: 8px 16px;
+    width: 120px;
+    align-self: flex-end;
+    margin-bottom: 15px;
+}
+
+.execute-button:hover {
+    background-color: #106EBE;
+}
+
+.result-container {
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .result {
-    margin-top: 15px;
-    padding: 10px;
-    background-color: #222;
+    background-color: #252526;
+    color: #DCDCDC;
     border-radius: 4px;
+    padding: 10px;
+    min-height: 50px;
+    white-space: normal;
+}
+
+.hint-container {
+    margin-top: 15px;
+}
+
+.hint-label {
+    color: #FFD700;
+    -unity-font-style: bold;
+    margin-bottom: 5px;
+}
+
+.hint {
+    color: #FFD700;
+    font-size: 14px;
 }

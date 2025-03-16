@@ -1,8 +1,8 @@
-// _Project/Database/Services/SqlTableBuilder.cs
 using UnityEngine;
 using Newtonsoft.Json.Linq;
 using System.Text;
 using System.Collections.Generic;
+using System.Data;
 using Mono.Data.Sqlite;
 using Project.Database.Models;
 
@@ -17,19 +17,60 @@ namespace Project.Database.Services
             _connection = connection;
         }
 
-        public void CreateTables(Dictionary<string, TableSchema> schemas, string jsonContent)
+        public void CreateTables(string jsonContent)
         {
             var jsonData = JObject.Parse(jsonContent);
-            
-            foreach (var schema in schemas.Values)
+            var tables = jsonData["tables"];
+
+            if (tables == null)
             {
-                CreateTableFromSchema(schema);
-                var tableData = FindTableDataInJson(jsonData, schema.TableName);
-                if (tableData != null)
+                Debug.LogError("No 'tables' object found in JSON");
+                return;
+            }
+
+            // Vérifier que la connexion est ouverte au début et la maintenir ouverte
+            bool connectionWasOpened = EnsureConnectionOpen();
+
+            try
+            {
+                foreach (JProperty tableProperty in tables.Children<JProperty>())
                 {
-                    PopulateTable(schema, tableData["units"]);
+                    string tableName = tableProperty.Name;
+                    JObject tableData = (JObject)tableProperty.Value;
+                    
+                    // Créer un schéma de table à partir des données JSON
+                    var schema = CreateSchemaFromJson(tableName, tableData["columns"]);
+                    
+                    // Créer la table dans la base de données
+                    CreateTableFromSchema(schema);
+                    
+                    // Peupler la table avec les données
+                    if (tableData["rows"] != null)
+                    {
+                        PopulateTable(schema, tableData["rows"]);
+                    }
                 }
             }
+            finally
+            {
+                // Fermer la connexion seulement si nous l'avons ouverte
+                if (connectionWasOpened && _connection.State == ConnectionState.Open)
+                {
+                    _connection.Close();
+                }
+            }
+        }
+
+        private TableSchema CreateSchemaFromJson(string tableName, JToken columnsData)
+        {
+            var schema = new TableSchema(tableName);
+            
+            foreach (JProperty column in columnsData.Children<JProperty>())
+            {
+                schema.Columns.Add(column.Name, column.Value.ToString());
+            }
+            
+            return schema;
         }
 
         private void CreateTableFromSchema(TableSchema schema)
@@ -49,72 +90,64 @@ namespace Project.Database.Services
             ExecuteNonQuery(builder.ToString());
         }
 
-        private void PopulateTable(TableSchema schema, JToken units)
+        private void PopulateTable(TableSchema schema, JToken rows)
         {
-            foreach (var unit in units)
+            foreach (var row in rows)
             {
-                var insertSql = GenerateInsertStatement(schema, unit);
+                var insertSql = GenerateInsertStatement(schema, row);
                 ExecuteNonQuery(insertSql);
             }
         }
 
-        private string GenerateInsertStatement(TableSchema schema, JToken unit)
+        private string GenerateInsertStatement(TableSchema schema, JToken row)
         {
             var columns = new List<string>();
             var values = new List<string>();
 
-            foreach (JProperty prop in unit)
+            foreach (JProperty prop in row.Children<JProperty>())
             {
-                if (prop.Name == "position")
-                {
-                    columns.Add("position_x");
-                    columns.Add("position_y");
-                    values.Add(unit["position"]["x"].ToString());
-                    values.Add(unit["position"]["y"].ToString());
-                }
-                else
-                {
-                    columns.Add(prop.Name);
-                    values.Add(FormatSqlValue(prop.Value));
-                }
+                columns.Add(prop.Name);
+                values.Add(FormatSqlValue(prop.Value));
             }
 
             return $"INSERT INTO {schema.TableName} ({string.Join(", ", columns)}) " +
                    $"VALUES ({string.Join(", ", values)})";
         }
 
-        private JToken FindTableDataInJson(JObject jsonData, string tableName)
-        {
-            foreach (var prop in jsonData.Properties())
-            {
-                if (prop.Value["tableName"]?.ToString() == tableName)
-                {
-                    return prop.Value;
-                }
-            }
-            return null;
-        }
-
         private string FormatSqlValue(JToken value)
         {
+            if (value == null || value.Type == JTokenType.Null)
+                return "NULL";
+                
             return value.Type switch
             {
-                JTokenType.String => $"'{value}'",
+                JTokenType.String => $"'{value.ToString().Replace("'", "''")}'",
                 JTokenType.Boolean => (bool)value ? "1" : "0",
                 _ => value.ToString()
             };
         }
 
+        private bool EnsureConnectionOpen()
+        {
+            if (_connection.State != ConnectionState.Open)
+            {
+                _connection.Open();
+                return true;
+            }
+            return false;
+        }
+
         private void ExecuteNonQuery(string sql)
         {
-            using var cmd = new SqliteCommand(sql, _connection);
             try
             {
+                using var cmd = new SqliteCommand(sql, _connection);
                 cmd.ExecuteNonQuery();
             }
             catch (System.Exception e)
             {
                 Debug.LogError($"Error executing SQL: {sql}\nError: {e.Message}");
+                throw;
             }
         }
     }

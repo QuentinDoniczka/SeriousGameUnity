@@ -1,115 +1,74 @@
-// _Project/Database/SqlManager.cs
 using UnityEngine;
 using Mono.Data.Sqlite;
-using System.IO;
-using System.Data;
-using System.Collections.Generic;
 using Project.Database.Services;
+using Project.Database.Models;
 
 namespace Project.Database
 {
     public class SqlManager : MonoBehaviour
     {
-        private SqliteConnection _connection;
-        private JsonSchemaAnalyzer _schemaAnalyzer;
+        private SqlConnectionService _connectionService;
         private SqlTableBuilder _tableBuilder;
-        private bool _isInitialized;
-        private string _currentLevelJson;
-
-        [System.Serializable]
-        public class LevelData
-        {
-            public Dictionary<string, TableData> tables;
-            public List<TaskData> tasks;
-        }
-
-        [System.Serializable]
-        public class TableData
-        {
-            public Dictionary<string, string> columns;
-            public List<Dictionary<string, object>> rows;
-        }
-
-        [System.Serializable]
-        public class TaskData
-        {
-            public int id;
-            public string name;
-            public string description;
-            public string difficulty;
-            public string query;
-            public string hint;
-            public List<string> allowed_commands;
-            public List<Dictionary<string, object>> expected;
-        }
+        private SqlDebugger _sqlDebugger;
+        private SqlQueryService _queryService;
+        private LevelDataService _levelDataService;
 
         private void Awake()
         {
-            InitializeDatabase();
+            InitializeServices();
         }
 
-        private void InitializeDatabase()
+        private void InitializeServices()
         {
-            if (_isInitialized) return;
-
-            string dbPath = Path.Combine(Application.temporaryCachePath, "game.db");
-            string connectionString = $"URI=file:{dbPath}";
+            _connectionService = new SqlConnectionService();
             
-            try
+            if (_connectionService.IsInitialized)
             {
-                _connection = new SqliteConnection(connectionString);
-                _schemaAnalyzer = new JsonSchemaAnalyzer();
-                _tableBuilder = new SqlTableBuilder(_connection);
-                _isInitialized = true;
+                _tableBuilder = new SqlTableBuilder(_connectionService.Connection);
+                _sqlDebugger = new SqlDebugger(_connectionService.Connection);
+                _queryService = new SqlQueryService(_connectionService);
+                _levelDataService = new LevelDataService();
             }
-            catch (System.Exception e)
+            else
             {
-                Debug.LogError($"Failed to initialize database: {e.Message}");
+                Debug.LogError("Failed to initialize database services");
             }
         }
 
         public void LoadLevelData(string levelName)
         {
-            string resourcePath = $"LevelData/{levelName}";
-            TextAsset jsonFile = Resources.Load<TextAsset>(resourcePath);
-
-            if (jsonFile == null)
+            string jsonContent = _levelDataService.LoadLevelJson(levelName);
+            
+            if (!string.IsNullOrEmpty(jsonContent))
             {
-                Debug.LogError($"Failed to load level file: {levelName}");
-                return;
-            }
-
-            try
-            {
-                InitializeDatabaseFromJson(jsonFile.text);
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Failed to initialize level data: {e.Message}");
+                InitializeDatabaseFromJson(jsonContent);
             }
         }
 
         public void InitializeDatabaseFromJson(string jsonContent)
         {
-            if (!_isInitialized)
+            if (!_connectionService.IsInitialized)
             {
                 Debug.LogError("SqlManager not initialized");
                 return;
             }
 
-            if (string.IsNullOrEmpty(jsonContent))
+            if (!_levelDataService.ValidateLevelData(jsonContent))
             {
-                Debug.LogError("JSON content is empty");
+                Debug.LogError("Invalid level data");
                 return;
             }
 
-            _currentLevelJson = jsonContent;
+            _levelDataService.SetLevelJson(jsonContent);
 
             try
             {
-                _connection.Open();
-                var schemas = _schemaAnalyzer.AnalyzeJsonStructure(jsonContent);
-                _tableBuilder.CreateTables(schemas, jsonContent);
+                // Ouvrir la connexion une seule fois pour toute l'opération
+                _connectionService.OpenConnection();
+                
+                // Opérations qui nécessitent une connexion ouverte
+                _queryService.DropAllTables();
+                _tableBuilder.CreateTables(jsonContent);
             }
             catch (System.Exception e)
             {
@@ -118,74 +77,49 @@ namespace Project.Database
             }
             finally
             {
-                if (_connection.State == ConnectionState.Open)
-                {
-                    _connection.Close();
-                }
+                // Fermer la connexion en fin d'opération
+                _connectionService.CloseConnection();
+                
+                // On peut déboguer après avoir fermé la connexion car DebugAllTables gère sa propre connexion
+                DebugAllTables();
             }
         }
 
         public LevelData GetCurrentLevelData()
         {
-            if (string.IsNullOrEmpty(_currentLevelJson))
-            {
-                Debug.LogError("No level data loaded");
-                return null;
-            }
-    
-            try
-            {
-                return JsonUtility.FromJson<LevelData>(_currentLevelJson);
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Error parsing level data: {e.Message}");
-                return null;
-            }
+            return _levelDataService.GetCurrentLevelData();
         }
 
         public void ExecuteQuery(string query, System.Action<SqliteDataReader> onResult)
         {
-            if (!_isInitialized)
+            _queryService.ExecuteQuery(query, onResult);
+        }
+        
+        public void DebugAllTables()
+        {
+            if (!_connectionService.IsInitialized)
             {
                 Debug.LogError("SqlManager not initialized");
                 return;
             }
-
-            if (string.IsNullOrEmpty(query))
+            
+            _sqlDebugger.DebugAllTables();
+        }
+        
+        public void DebugTable(string tableName)
+        {
+            if (!_connectionService.IsInitialized)
             {
-                Debug.LogError("Query is empty");
+                Debug.LogError("SqlManager not initialized");
                 return;
             }
-
-            try
-            {
-                _connection.Open();
-                using var command = new SqliteCommand(query, _connection);
-                using var reader = command.ExecuteReader();
-                onResult?.Invoke(reader);
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Error executing query: {e.Message}");
-                throw;
-            }
-            finally
-            {
-                if (_connection.State == ConnectionState.Open)
-                {
-                    _connection.Close();
-                }
-            }
+            
+            _sqlDebugger.DebugTable(tableName);
         }
 
         private void OnDestroy()
         {
-            if (_connection != null && _connection.State == ConnectionState.Open)
-            {
-                _connection.Close();
-            }
-            _connection?.Dispose();
+            _connectionService?.Dispose();
         }
     }
 }
