@@ -6,7 +6,8 @@ namespace Project.Game.Characters
     {
         public GameObject Instance { get; private set; }
         public string PrefabPath { get; private set; }
-        private CharacterController _controller;
+        private CharacterMove _move;
+        private Vector3 _lastTargetPosition;
 
         public Vector2 Position 
         { 
@@ -15,10 +16,11 @@ namespace Project.Game.Characters
             { 
                 if (Instance != null)
                 {
-                    // Utiliser le contrôleur si disponible
-                    if (_controller != null)
+                    _lastTargetPosition = value;
+                    
+                    if (_move != null)
                     {
-                        _controller.MoveTo(value);
+                        _move.MoveTo(value, 0);
                     }
                     else
                     {
@@ -28,16 +30,42 @@ namespace Project.Game.Characters
             }
         }
 
+        public bool IsMoving => _move != null && _move.IsMoving();
+
         public Character(GameObject instance, string prefabPath)
         {
             Instance = instance;
             PrefabPath = prefabPath;
+            _lastTargetPosition = instance.transform.position;
             
-            // Si le contrôleur n'existe pas déjà, l'ajouter
-            _controller = Instance.GetComponent<CharacterController>();
-            if (_controller == null)
+            _move = Instance.GetComponent<CharacterMove>();
+            if (_move == null)
             {
-                _controller = Instance.AddComponent<CharacterController>();
+                _move = Instance.AddComponent<CharacterMove>();
+            }
+            
+            DisablePotentialConflictingScripts();
+        }
+
+        private void DisablePotentialConflictingScripts()
+        {
+            string[] potentialConflictScripts = {
+                "NavMeshAgent", "Rigidbody", "Rigidbody2D", "CharacterController"
+            };
+            
+            foreach (var scriptName in potentialConflictScripts)
+            {
+                if (scriptName == "CharacterController") continue;
+                
+                Component component = Instance.GetComponent(scriptName);
+                if (component != null && component != _move)
+                {
+                    MonoBehaviour behaviour = component as MonoBehaviour;
+                    if (behaviour != null)
+                    {
+                        behaviour.enabled = false;
+                    }
+                }
             }
         }
 
@@ -55,6 +83,41 @@ namespace Project.Game.Characters
             {
                 Object.Destroy(Instance);
                 Instance = null;
+            }
+        }
+
+        public void RandomLocation(float speed = 2.0f, float minX = 0f, float maxX = 1f, float minY = 0f, float maxY = 1f)
+        {
+            Vector2 randomDestination = new Vector2(
+                Random.Range(minX, maxX),
+                Random.Range(minY, maxY)
+            );
+            
+            MoveTo(randomDestination, speed);
+        }
+        
+        public void MoveTo(Vector2 position, float speed = 2.0f)
+        {
+            if (Instance != null)
+            {
+                _lastTargetPosition = position;
+                
+                if (_move != null)
+                {
+                    _move.MoveTo(position, speed);
+                }
+                else
+                {
+                    Instance.transform.position = position;
+                }
+            }
+        }
+        
+        public void ResetToLastTargetPosition()
+        {
+            if (Instance != null && _move != null)
+            {
+                _move.MoveTo(_lastTargetPosition, 0);
             }
         }
     }

@@ -12,7 +12,7 @@ namespace Project.UI.SQL
         [SerializeField] private string characterPrefabPath = "Characters/sampleCharacterHuman";
         [SerializeField] private GameObject spawnZone;
         [SerializeField] private GameObject resultZone;
-        [SerializeField] private int gridSize = 1;
+        [SerializeField] private int gridSize = 3;
         
         private UIDocument _document;
         private Button _backButton;
@@ -34,10 +34,6 @@ namespace Project.UI.SQL
             if (spawnZone == null)
             {
                 spawnZone = GameObject.Find("safe zone");
-                if (spawnZone == null)
-                {
-                    Debug.LogWarning("GameObject 'safe zone' not found");
-                }
             }
         }
         
@@ -53,18 +49,12 @@ namespace Project.UI.SQL
             );
             
             _characters.AddRange(gridCharacters);
-            
-            Debug.Log($"Grid of {gridCharacters.Count} characters created ({gridSize}x{gridSize})");
         }
         
         private void OnEnable()
         {
             _document = GetComponent<UIDocument>();
-            if (_document == null)
-            {
-                Debug.LogError("UIDocument component not found");
-                return;
-            }
+            if (_document == null) return;
             
             var root = _document.rootVisualElement;
             _contentArea = root.Q<VisualElement>("content-area");
@@ -134,23 +124,18 @@ namespace Project.UI.SQL
         {
             EventManager.Instance.TriggerEvent(NavigationEventType.ToSqlMenu);
         }
-        
+
         private void OnMoveUnitsClicked()
         {
+
             foreach (Character character in _characters)
             {
-                Vector2 oldPosition = character.Position;
-                Debug.Log($"Avant déplacement : {oldPosition}");
-        
-                character.Position += new Vector2(2f, 1f);
-        
-                Vector2 newPosition = character.Position;
-                Debug.Log($"Après déplacement : {newPosition}");
+                float speed = 2.0f;
+                character.RandomLocation(speed, -3f, 3f, -3f, 3f);
             }
 
-            Debug.Log($"Déplacement de {_characters.Count} personnages terminé");
         }
-        
+
         private void OnDestroy()
         {
             foreach (Character character in _characters)
