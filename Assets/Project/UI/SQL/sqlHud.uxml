@@ -1,18 +1,32 @@
 ﻿<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Style src="sqlHud.uss" />
     <ui:VisualElement name="container" class="container">
-        <ui:Label name="task-name" class="task-name" text="Nom de la tâche" />
-        <ui:Label name="task-description" class="task-description" text="Description de la tâche" />
-
-        <ui:TextField name="query-input" class="query-input" multiline="true" />
-        <ui:Button name="execute-button" class="execute-button" text="Exécuter" />
-
-        <ui:VisualElement name="result-container" class="result-container">
-            <ui:Label name="result" class="result" text="" />
+        <ui:VisualElement name="content-area" class="content-area">
+            <ui:ScrollView name="scroll-view" class="scroll-view">
+                <ui:VisualElement name="row-1" class="row row-dark">
+                    <ui:VisualElement name="button-container" class="button-container">
+                        <ui:Button name="move-units-button" class="action-button" text="Move" focusable="true" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="row-2" class="row row-light" />
+                <ui:VisualElement name="row-3" class="row row-dark" />
+                <ui:VisualElement name="row-4" class="row row-light" />
+                <ui:VisualElement name="row-5" class="row row-dark" />
+                <ui:VisualElement name="row-6" class="row row-light" />
+                <ui:VisualElement name="row-7" class="row row-dark" />
+                <ui:VisualElement name="row-8" class="row row-light" />
+                <ui:VisualElement name="row-9" class="row row-dark" />
+                <ui:VisualElement name="row-10" class="row row-light" />
+            </ui:ScrollView>
         </ui:VisualElement>
 
-        <ui:VisualElement name="hint-container" class="hint-container">
-            <ui:Label text="Indice:" class="hint-label" />
-            <ui:Label name="hint" class="hint" text="" />
+        <ui:VisualElement name="transition-layer" class="transition-layer" />
+
+        <ui:VisualElement name="nav-bar" class="nav-bar">
+            <ui:Button name="hint-button" class="nav-button nav-button-first" text="1" />
+            <ui:Button name="prev-button" class="nav-button" text="2" />
+            <ui:Button name="next-button" class="nav-button" text="3" />
+            <ui:Button name="exit-button" class="nav-button" text="4" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

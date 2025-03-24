@@ -3,6 +3,46 @@
 ```
 Assets/
 │
+├── MedievalFantasyCharacters/              # Assets de personnages
+│   ├── Animation Guide/                    # Guide d'animation
+│   ├── Animations/                         # Animations
+│   │   ├── Character/                      # Animations de personnage
+│   │   │   ├── body_black_0.controller     # Contrôleur d'animation
+│   │   │   ├── ChopAttack.anim             # Animation d'attaque
+│   │   │   ├── Idle.anim                   # Animation d'attente
+│   │   │   ├── Jump.anim                   # Animation de saut
+│   │   │   ├── Run.anim                    # Animation de course
+│   │   │   ├── ThrustAttack.anim           # Animation d'attaque
+│   │   │   └── Walk.anim                   # Animation de marche
+│   │   ├── Elk/                            # Animations d'élan
+│   │   ├── Horse/                          # Animations de cheval
+│   │   ├── Wildboar/                       # Animations de sanglier
+│   │   └── Wolf/                           # Animations de loup
+│   │
+│   └── prefabs/                            # Préfabriqués
+│       ├── Elk.prefab                      # Préfabriqué d'élan
+│       ├── Horse.prefab                    # Préfabriqué de cheval
+│       ├── sampleCharacterHuman.prefab     # Exemple de personnage humain
+│       ├── Wildboar.prefab                 # Préfabriqué de sanglier
+│       └── Wolf.prefab                     # Préfabriqué de loup
+│
+├── Scenes/                                 # Scènes
+│
+├── sprites/                                # Sprites
+│   ├── Characters/                         # Sprites de personnages
+│   │   ├── body/                           # Corps
+│   │   ├── elf/                            # Elfe
+│   │   ├── goblin/                         # Gobelin
+│   │   ├── hand gloved/                    # Main gantée
+│   │   ├── human/                          # Humain
+│   │   ├── orc/                            # Orc
+│   │   ├── mounts/                         # Montures
+│   │   ├── VFX/                            # Effets visuels
+│   │   ├── wardrobe/                       # Garde-robe
+│   │   └── weapons/                        # Armes
+│   │
+│   └── README.rtf                          # Documentation des sprites
+│
 ├── Project/                   
 │   ├── Api/                                # Tout ce qui concerne les APIs
 │   │   ├── ApiServiceManager.cs            # Gestionnaire des services API
@@ -23,7 +63,7 @@ Assets/
 │   │   ├── Models/                         # DTOs
 │   │   │   ├── Validators/                 # Validations des modèles
 │   │   │   │   ├── IValidator.cs           # Interface de validation
-│   │   │       ├── ValidationResult.cs     # Résultat de validation
+│   │   │   │   ├── ValidationResult.cs     # Résultat de validation
 │   │   │   │   ├── LoginValidator.cs       # Validation de login
 │   │   │   │   └── RegisterValidator.cs    # Validation d'inscription
 │   │   │   │
@@ -41,6 +81,9 @@ Assets/
 │   │
 │   ├── Core/                               # Core systems
 │   │   ├── CoreManager.cs                  # Manager principal persistant
+│   │   │
+│   │   ├── Resource/                       # Ressources
+│   │   │   └── ResourceManager.cs          # Chargement de ressources
 │   │   │
 │   │   ├── Services/                       # Services system
 │   │   │   └── ServiceManager.cs           # Central service manager
@@ -66,18 +109,24 @@ Assets/
 │   │   └── QueryValidator.cs               # Validation des requêtes SQL
 │   │
 │   ├── Game/                               # Logique de jeu
-│   │   └── Managers/
-│   │       ├── GameManager.cs              # Manager principal du jeu
+│   │   ├── Managers/
+│   │   │   └── GameManager.cs              # Manager principal du jeu
+│   │   └── Characters/
+│   │       ├── Character.cs
+│   │       └── CharacterFactory.cs
 │   │
 │   ├── UI/                                 # Interface utilisateur
 │   │   ├── HUD/
-│   │   │   ├── HUD_SQL_Manager.cs          # Gestionnaire global du HUD SQL
+│   │   │   ├── HudSqlManager.cs            # Gestionnaire global du HUD SQL
 │   │   │   └── SqlQueryData.cs             # Structure de données pour les requêtes SQL
 │   │   │
+│   │   ├── Initializers/
+│   │   │   └── SceneInitializerUI.cs       # Initialisation des UI de scène
+│   │   │
 │   │   ├── SQL/                            # Dossier pour les UI SQL
-│   │   │   ├── SqlPanel.cs                 # Panel SQL
 │   │   │   ├── sqlHud.uxml                 # Structure UI du HUD SQL 
-│   │   │   └── sqlHud.uss                  # Styles du HUD SQL
+│   │   │   ├── sqlHud.uss                  # Styles du HUD SQL
+│   │   │   └── SqlPanel.cs                 # Panel SQL
 │   │   │
 │   │   ├── Menu/                           # Menu
 │   │   │   ├── MainMenuPanel.cs            # Menu principal
@@ -105,6 +154,9 @@ Assets/
 │           └── SqlLevel.unity              # Niveau SQL
 │
 ├── Resources/                              # Assets chargés dynamiquement
+│   ├── Characters/                         # Personnages
+│   │   └── sampleCharacterHuman.prefab     # Exemple de personnage humain
+│   │
 │   └── LevelData/                          # Données des niveaux
 │       └── level_test.json                 # Données du niveau de test SQL
 │

@@ -1,19 +1,61 @@
 ﻿using UnityEngine;
 using UnityEngine.UIElements;
 using Project.Core.Events;
-using Project.UI.HUD;
+using Project.Game.Characters;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace Project.UI.SQL
 {
     public class SqlPanel : MonoBehaviour
     {
+        [SerializeField] private string characterPrefabPath = "Characters/sampleCharacterHuman";
+        [SerializeField] private GameObject spawnZone;
+        [SerializeField] private GameObject resultZone;
+        [SerializeField] private int gridSize = 6;
+        
         private UIDocument _document;
-        private TextField _queryInput;
-        private Button _executeButton;
-        private Label _taskNameLabel;
-        private Label _taskDescriptionLabel;
-        private Label _hintLabel;
-        private Label _resultLabel;
+        private Button _backButton;
+        private Button _moveUnitsButton;
+        private VisualElement _contentArea;
+        private VisualElement _navBar;
+        private ScrollView _scrollView;
+        private List<Character> _characters = new();
+        private bool _isProcessingClick = false;
+        
+        private void Awake()
+        {
+            FindSafeZone();
+            InstantiateCharacters();
+        }
+        
+        private void FindSafeZone()
+        {
+            if (spawnZone == null)
+            {
+                spawnZone = GameObject.Find("safe zone");
+                if (spawnZone == null)
+                {
+                    Debug.LogWarning("GameObject 'safe zone' not found");
+                }
+            }
+        }
+        
+        private void InstantiateCharacters()
+        {
+            if (spawnZone == null) return;
+            
+            List<Character> gridCharacters = CharacterFactory.CreateGridInSafeZone(
+                characterPrefabPath,
+                spawnZone,
+                gridSize,
+                transform
+            );
+            
+            _characters.AddRange(gridCharacters);
+            
+            Debug.Log($"Grid of {gridCharacters.Count} characters created ({gridSize}x{gridSize})");
+        }
         
         private void OnEnable()
         {
@@ -25,60 +67,86 @@ namespace Project.UI.SQL
             }
             
             var root = _document.rootVisualElement;
-            _queryInput = root.Q<TextField>("query-input");
-            _executeButton = root.Q<Button>("execute-button");
-            _taskNameLabel = root.Q<Label>("task-name");
-            _taskDescriptionLabel = root.Q<Label>("task-description");
-            _hintLabel = root.Q<Label>("hint");
-            _resultLabel = root.Q<Label>("result");
+            _contentArea = root.Q<VisualElement>("content-area");
+            _navBar = root.Q<VisualElement>("nav-bar");
+            _scrollView = root.Q<ScrollView>("scroll-view");
+            _backButton = root.Q<Button>("back-button");
+            _moveUnitsButton = root.Q<Button>("move-units-button");
             
-            if (_executeButton != null)
+            ConfigureScrollView();
+            ConfigureButtons();
+        }
+        
+        private void ConfigureScrollView()
+        {
+            if (_scrollView != null)
             {
-                _executeButton.clicked += OnExecuteClicked;
+                _scrollView.elasticity = 0;
+                _scrollView.scrollDecelerationRate = 0.1f;
+                _scrollView.touchScrollBehavior = ScrollView.TouchScrollBehavior.Clamped;
+            }
+        }
+        
+        private void ConfigureButtons()
+        {
+            if (_backButton != null)
+            {
+                _backButton.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    OnBackClicked();
+                });
             }
             
-            EventManager.Instance.Subscribe(SqlEventType.QueryValidated, OnQueryValidated);
-            UpdateUI();
+            if (_moveUnitsButton != null)
+            {
+                _moveUnitsButton.RegisterCallback<ClickEvent>(evt => {
+                    evt.StopPropagation();
+                    if (!_isProcessingClick)
+                    {
+                        _isProcessingClick = true;
+                        OnMoveUnitsClicked();
+                        StartCoroutine(ResetClickFlag());
+                    }
+                });
+            }
+        }
+        
+        private IEnumerator ResetClickFlag()
+        {
+            yield return new WaitForSeconds(0.2f);
+            _isProcessingClick = false;
         }
         
         private void OnDisable()
         {
-            if (_executeButton != null)
+            if (_backButton != null)
             {
-                _executeButton.clicked -= OnExecuteClicked;
+                _backButton.UnregisterCallback<ClickEvent>(evt => OnBackClicked());
             }
             
-            EventManager.Instance.Unsubscribe(SqlEventType.QueryValidated, OnQueryValidated);
+            if (_moveUnitsButton != null)
+            {
+                _moveUnitsButton.UnregisterCallback<ClickEvent>(evt => OnMoveUnitsClicked());
+            }
         }
         
-        private void UpdateUI()
+        private void OnBackClicked()
         {
-            var currentTask = HudSqlManager.Instance.GetCurrentTask();
-            if (currentTask == null) return;
-            
-            if (_taskNameLabel != null)
-                _taskNameLabel.text = currentTask.TaskName;
-                
-            if (_taskDescriptionLabel != null)
-                _taskDescriptionLabel.text = currentTask.TaskDescription;
-                
-            if (_hintLabel != null)
-                _hintLabel.text = currentTask.Hint;
+            EventManager.Instance.TriggerEvent(NavigationEventType.ToSqlMenu);
         }
         
-        private void OnExecuteClicked()
+        private void OnMoveUnitsClicked()
         {
-            if (_queryInput == null) return;
-            
-            var query = _queryInput.value;
-            if (string.IsNullOrEmpty(query)) return;
-            
-            HudSqlManager.Instance.SubmitQuery(query);
+            Debug.Log("Le bouton de déplacement des unités a été cliqué");
         }
         
-        private void OnQueryValidated()
+        private void OnDestroy()
         {
-            UpdateUI();
+            foreach (Character character in _characters)
+            {
+                character?.Destroy();
+            }
+            _characters.Clear();
         }
     }
 }

@@ -63,10 +63,8 @@ namespace Project.Database
 
             try
             {
-                // Ouvrir la connexion une seule fois pour toute l'opération
                 _connectionService.OpenConnection();
                 
-                // Opérations qui nécessitent une connexion ouverte
                 _queryService.DropAllTables();
                 _tableBuilder.CreateTables(jsonContent);
             }
@@ -77,11 +75,9 @@ namespace Project.Database
             }
             finally
             {
-                // Fermer la connexion en fin d'opération
                 _connectionService.CloseConnection();
                 
-                // On peut déboguer après avoir fermé la connexion car DebugAllTables gère sa propre connexion
-                DebugAllTables();
+                // DebugAllTables();
             }
         }
 

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Project.Core.Events;
 
 namespace Project.Scenes.Managers 
@@ -40,7 +39,7 @@ namespace Project.Scenes.Managers
             eventManager.Subscribe(NavigationEventType.ToSqlMenu, () => LoadScene("SqlMenu"));
             eventManager.Subscribe(NavigationEventType.ToSqlLevel, () => LoadScene("SqlLevel"));
         }
-
+        
         private void LoadScene(string sceneName) 
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
