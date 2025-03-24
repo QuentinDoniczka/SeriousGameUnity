@@ -94,8 +94,6 @@
     border-width: 2px;
     background-color: rgba(70, 70, 80, 0.4);
     -unity-background-image-tint-color: rgba(70, 70, 80, 0.4);
-    -unity-focus-border-color: rgb(0, 120, 200);
-    -unity-animation-duration: 0;
 }
 
 .nav-button-first {
@@ -104,20 +102,4 @@
 
 .action-button {
     transition: all 0.1s ease-in-out;
-}
-
-.unity-button:focus-visible {
-    outline: none;
-    -unity-focus-border-width: 0;
-}
-
-Button {
-    -unity-focus-border-width: 0;
-}
-
-.action-button:focus {
-    border-color: rgb(0, 120, 200);
-    border-width: 2px;
-    -unity-focus-border-color: rgb(0, 120, 200);
-    -unity-animation-duration: 0;
 }

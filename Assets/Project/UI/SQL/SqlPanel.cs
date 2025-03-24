@@ -12,7 +12,7 @@ namespace Project.UI.SQL
         [SerializeField] private string characterPrefabPath = "Characters/sampleCharacterHuman";
         [SerializeField] private GameObject spawnZone;
         [SerializeField] private GameObject resultZone;
-        [SerializeField] private int gridSize = 6;
+        [SerializeField] private int gridSize = 1;
         
         private UIDocument _document;
         private Button _backButton;
@@ -137,7 +137,18 @@ namespace Project.UI.SQL
         
         private void OnMoveUnitsClicked()
         {
-            Debug.Log("Le bouton de déplacement des unités a été cliqué");
+            foreach (Character character in _characters)
+            {
+                Vector2 oldPosition = character.Position;
+                Debug.Log($"Avant déplacement : {oldPosition}");
+        
+                character.Position += new Vector2(2f, 1f);
+        
+                Vector2 newPosition = character.Position;
+                Debug.Log($"Après déplacement : {newPosition}");
+            }
+
+            Debug.Log($"Déplacement de {_characters.Count} personnages terminé");
         }
         
         private void OnDestroy()
