@@ -16,9 +16,12 @@ namespace Project.UI.SQL
         [SerializeField] private GameObject resultZone;
         
         private UIDocument _document;
-        private Button _backButton;
         private Button _moveUnitsButton;
-        private Button _executeQueryButton;
+        private Button _moveBackButton;
+        private Button _hintButton;
+        private Button _prevButton;
+        private Button _nextButton;
+        private Button _exitButton;
         private TextField _queryTextField;
         private Label _taskDescriptionLabel;
         
@@ -103,37 +106,54 @@ namespace Project.UI.SQL
             if (_document == null) return;
             
             var root = _document.rootVisualElement;
-            _backButton = root.Q<Button>("back-button");
+            // Boutons d'action
             _moveUnitsButton = root.Q<Button>("move-units-button");
-            _executeQueryButton = root.Q<Button>("execute-query-button");
+            _moveBackButton = root.Q<Button>("move-back-button");
+            
+            // Boutons de navigation
+            _hintButton = root.Q<Button>("hint-button");
+            _prevButton = root.Q<Button>("prev-button");
+            _nextButton = root.Q<Button>("next-button");
+            _exitButton = root.Q<Button>("exit-button");
+            
+            // Autres éléments UI
             _queryTextField = root.Q<TextField>("query-input");
             _taskDescriptionLabel = root.Q<Label>("task-description");
         }
         
         private void RegisterEventHandlers()
         {
-            if (_backButton != null)
-            {
-                _backButton.RegisterCallback<ClickEvent>(OnBackButtonClicked);
-            }
-            
             if (_moveUnitsButton != null)
             {
                 _moveUnitsButton.RegisterCallback<ClickEvent>(OnMoveUnitsButtonClicked);
             }
             
-            if (_executeQueryButton != null)
+            if (_moveBackButton != null)
             {
-                _executeQueryButton.RegisterCallback<ClickEvent>(OnExecuteQueryButtonClicked);
+                _moveBackButton.RegisterCallback<ClickEvent>(OnMoveBackButtonClicked);
+            }
+            
+            if (_hintButton != null)
+            {
+                _hintButton.RegisterCallback<ClickEvent>(OnHintButtonClicked);
+            }
+            
+            if (_prevButton != null)
+            {
+                _prevButton.RegisterCallback<ClickEvent>(OnPrevButtonClicked);
+            }
+            
+            if (_nextButton != null)
+            {
+                _nextButton.RegisterCallback<ClickEvent>(OnNextButtonClicked);
+            }
+            
+            if (_exitButton != null)
+            {
+                _exitButton.RegisterCallback<ClickEvent>(OnExitButtonClicked);
             }
             
             EventManager.Instance.Subscribe(SqlEventType.QueryValidated, OnQueryValidated);
-        }
-        
-        private void OnBackButtonClicked(ClickEvent evt)
-        {
-            evt.StopPropagation();
-            EventManager.Instance.TriggerEvent(NavigationEventType.ToSqlMenu);
         }
         
         private void OnMoveUnitsButtonClicked(ClickEvent evt)
@@ -147,15 +167,43 @@ namespace Project.UI.SQL
             }
         }
         
-        private void OnExecuteQueryButtonClicked(ClickEvent evt)
+        private void OnMoveBackButtonClicked(ClickEvent evt)
         {
             evt.StopPropagation();
-            if (!_isProcessingClick && _queryTextField != null)
+            if (!_isProcessingClick)
             {
                 _isProcessingClick = true;
-                ExecuteQuery(_queryTextField.value);
+                CharacterVisualizationService.Instance.MoveCharactersToStartPositions(spawnZone);
                 StartCoroutine(ResetClickFlag());
             }
+        }
+        
+        private void OnHintButtonClicked(ClickEvent evt)
+        {
+            evt.StopPropagation();
+            Debug.Log("Hint button clicked");
+            // Logique d'indice à implémenter
+        }
+        
+        private void OnPrevButtonClicked(ClickEvent evt)
+        {
+            evt.StopPropagation();
+            Debug.Log("Previous button clicked");
+            // Logique de tâche précédente à implémenter
+        }
+        
+        private void OnNextButtonClicked(ClickEvent evt)
+        {
+            evt.StopPropagation();
+            Debug.Log("Next button clicked");
+            // Logique de tâche suivante à implémenter
+        }
+        
+        private void OnExitButtonClicked(ClickEvent evt)
+        {
+            evt.StopPropagation();
+            Debug.Log("Exit button clicked");
+            EventManager.Instance.TriggerEvent(NavigationEventType.ToSqlMenu);
         }
         
         private void OnQueryValidated()
@@ -197,19 +245,34 @@ namespace Project.UI.SQL
         
         private void UnregisterEventHandlers()
         {
-            if (_backButton != null)
-            {
-                _backButton.UnregisterCallback<ClickEvent>(OnBackButtonClicked);
-            }
-            
             if (_moveUnitsButton != null)
             {
                 _moveUnitsButton.UnregisterCallback<ClickEvent>(OnMoveUnitsButtonClicked);
             }
             
-            if (_executeQueryButton != null)
+            if (_moveBackButton != null)
             {
-                _executeQueryButton.UnregisterCallback<ClickEvent>(OnExecuteQueryButtonClicked);
+                _moveBackButton.UnregisterCallback<ClickEvent>(OnMoveBackButtonClicked);
+            }
+            
+            if (_hintButton != null)
+            {
+                _hintButton.UnregisterCallback<ClickEvent>(OnHintButtonClicked);
+            }
+            
+            if (_prevButton != null)
+            {
+                _prevButton.UnregisterCallback<ClickEvent>(OnPrevButtonClicked);
+            }
+            
+            if (_nextButton != null)
+            {
+                _nextButton.UnregisterCallback<ClickEvent>(OnNextButtonClicked);
+            }
+            
+            if (_exitButton != null)
+            {
+                _exitButton.UnregisterCallback<ClickEvent>(OnExitButtonClicked);
             }
             
             EventManager.Instance.Unsubscribe(SqlEventType.QueryValidated, OnQueryValidated);

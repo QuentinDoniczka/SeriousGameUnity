@@ -7,6 +7,7 @@ namespace Project.Game.Characters
         public GameObject Instance { get; private set; }
         public string PrefabPath { get; private set; }
         private CharacterMove _move;
+        public Vector2 StartPosition { get; private set; }
 
         public Vector2 Position 
         { 
@@ -15,7 +16,6 @@ namespace Project.Game.Characters
             { 
                 if (Instance != null)
                 {
-                    
                     if (_move != null)
                     {
                         _move.MoveTo(value, 0);
@@ -27,6 +27,7 @@ namespace Project.Game.Characters
                 }
             }
         }
+        
         public void MoveToRandomPositionInZone(GameObject zone, float speed = 2.0f)
         {
             if (zone == null || Instance == null) return;
@@ -35,7 +36,7 @@ namespace Project.Game.Characters
             MoveTo(randomPosition, speed);
         }
 
-        public void MoveToPositionInZone(GameObject zone, Vector2 normalizedPosition, float speed = 2.0f)
+        public void MoveToPositionInZone(GameObject zone, Vector2 normalizedPosition, float speed = 1.5f)
         {
             if (zone == null || Instance == null) return;
     
@@ -49,6 +50,7 @@ namespace Project.Game.Characters
         {
             Instance = instance;
             PrefabPath = prefabPath;
+            StartPosition = instance.transform.position;
             
             _move = Instance.GetComponent<CharacterMove>();
             if (_move == null)
@@ -73,11 +75,11 @@ namespace Project.Game.Characters
                 Instance = null;
             }
         }
-        public void MoveTo(Vector2 position, float speed = 2.0f)
+        
+        public void MoveTo(Vector2 position, float speed = 1.5f)
         {
             if (Instance != null)
             {
-                
                 if (_move != null)
                 {
                     _move.MoveTo(position, speed);
@@ -87,6 +89,11 @@ namespace Project.Game.Characters
                     Instance.transform.position = position;
                 }
             }
+        }
+        
+        public void MoveToStartPosition(float speed = 1.5f)
+        {
+            MoveTo(StartPosition, speed);
         }
     }
 }

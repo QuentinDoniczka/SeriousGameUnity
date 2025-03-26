@@ -9,7 +9,7 @@ namespace Project.Game.Characters.Services
         private static CharacterVisualizationService _instance;
         public static CharacterVisualizationService Instance => _instance ??= new CharacterVisualizationService();
         
-        private List<Character> _activeCharacters = new List<Character>();
+        private List<Character> _activeCharacters = new ();
         private Transform _parentTransform;
         
         private CharacterVisualizationService() { }
@@ -36,13 +36,23 @@ namespace Project.Game.Characters.Services
             return newCharacters;
         }
         
-        public void MoveCharactersToZone(GameObject targetZone, float speed = 1.0f)
+        public void MoveCharactersToZone(GameObject targetZone, float speed = 1.5f)
         {
             if (targetZone == null) return;
             
             foreach (Character character in _activeCharacters)
             {
                 character.MoveToRandomPositionInZone(targetZone, speed);
+            }
+        }
+        
+        public void MoveCharactersToStartPositions(GameObject targetZone, float speed = 1.5f)
+        {
+            if (targetZone == null) return;
+            
+            foreach (Character character in _activeCharacters)
+            {
+                character.MoveToStartPosition(speed);
             }
         }
         

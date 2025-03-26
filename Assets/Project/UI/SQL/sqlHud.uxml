@@ -8,7 +8,11 @@
                         <ui:Button name="move-units-button" class="action-button" text="Move" focusable="true" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="row-2" class="row row-light" />
+                <ui:VisualElement name="row-2" class="row row-light">
+                    <ui:VisualElement name="button-container-2" class="button-container">
+                        <ui:Button name="move-back-button" class="action-button" text="Move Back" focusable="true" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
                 <ui:VisualElement name="row-3" class="row row-dark" />
                 <ui:VisualElement name="row-4" class="row row-light" />
                 <ui:VisualElement name="row-5" class="row row-dark" />
