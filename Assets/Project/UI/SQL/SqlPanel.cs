@@ -1,32 +1,73 @@
 ﻿using UnityEngine;
 using UnityEngine.UIElements;
 using Project.Core.Events;
-using Project.Game.Characters;
-using System.Collections.Generic;
+using Project.Core.Service;
+using Project.Game.Characters.Services;
 using System.Collections;
+using System.Collections.Generic;
+using Project.Database.Models;
+using Project.Game.Characters;
 
 namespace Project.UI.SQL
-{
+{ 
     public class SqlPanel : MonoBehaviour
     {
-        [SerializeField] private string characterPrefabPath = "Characters/sampleCharacterHuman";
         [SerializeField] private GameObject spawnZone;
         [SerializeField] private GameObject resultZone;
-        [SerializeField] private int gridSize = 3;
         
         private UIDocument _document;
         private Button _backButton;
         private Button _moveUnitsButton;
-        private VisualElement _contentArea;
-        private VisualElement _navBar;
-        private ScrollView _scrollView;
-        private List<Character> _characters = new();
+        private Button _executeQueryButton;
+        private TextField _queryTextField;
+        private Label _taskDescriptionLabel;
+        
         private bool _isProcessingClick = false;
+        private LevelData _levelData;
         
         private void Awake()
         {
             FindSafeZone();
-            InstantiateCharacters();
+            CharacterVisualizationService.Instance.SetParentTransform(transform);
+        }
+        
+        private void Start()
+        {
+            _levelData = ServiceManager.Instance.Sql.GetCurrentLevelData();
+            if (_levelData != null)
+            {
+                InitializeCharacters();
+                UpdateTaskDescription();
+                ExecuteMageQuery();
+            }
+        }
+        
+        private void ExecuteMageQuery()
+        {
+            string mageQuery = "SELECT * FROM army WHERE role = 'mage'";
+            Debug.Log($"Exécution de la requête: {mageQuery}");
+            
+            CharacterDataService.Instance.ExecuteCharacterQuery(mageQuery, mageResults => {
+                Debug.Log($"Mages trouvés: {mageResults.Count}");
+                
+                foreach (var mage in mageResults)
+                {
+                    Debug.Log($"Mage: {mage.Name}, Faction: {mage.Faction}, Rôle: {mage.Role}");
+                }
+            });
+        }
+        
+        private void InitializeCharacters()
+        {
+            CharacterDataService.Instance.LoadAllCharacters();
+            if (CharacterDataService.Instance.HasCharacters())
+            {
+                CharacterVisualizationService.Instance.DestroyAllCharacters();
+                CharacterVisualizationService.Instance.InstantiateCharacters(
+                    CharacterDataService.Instance.GetAllCharacters(),
+                    spawnZone
+                );
+            }
         }
         
         private void FindSafeZone()
@@ -35,69 +76,111 @@ namespace Project.UI.SQL
             {
                 spawnZone = GameObject.Find("safe zone");
             }
+            
+            if (resultZone == null)
+            {
+                resultZone = GameObject.Find("result zone");
+            }
         }
         
-        private void InstantiateCharacters()
+        private void UpdateTaskDescription()
         {
-            if (spawnZone == null) return;
+            if (_taskDescriptionLabel == null || _levelData?.tasks == null || _levelData.tasks.Count == 0) return;
             
-            List<Character> gridCharacters = CharacterFactory.CreateGridInSafeZone(
-                characterPrefabPath,
-                spawnZone,
-                gridSize,
-                transform
-            );
-            
-            _characters.AddRange(gridCharacters);
+            var currentTask = _levelData.tasks[0];
+            _taskDescriptionLabel.text = $"{currentTask.name}: {currentTask.description}";
         }
         
         private void OnEnable()
+        {
+            InitializeUI();
+            RegisterEventHandlers();
+        }
+        
+        private void InitializeUI()
         {
             _document = GetComponent<UIDocument>();
             if (_document == null) return;
             
             var root = _document.rootVisualElement;
-            _contentArea = root.Q<VisualElement>("content-area");
-            _navBar = root.Q<VisualElement>("nav-bar");
-            _scrollView = root.Q<ScrollView>("scroll-view");
             _backButton = root.Q<Button>("back-button");
             _moveUnitsButton = root.Q<Button>("move-units-button");
-            
-            ConfigureScrollView();
-            ConfigureButtons();
+            _executeQueryButton = root.Q<Button>("execute-query-button");
+            _queryTextField = root.Q<TextField>("query-input");
+            _taskDescriptionLabel = root.Q<Label>("task-description");
         }
         
-        private void ConfigureScrollView()
-        {
-            if (_scrollView != null)
-            {
-                _scrollView.elasticity = 0;
-                _scrollView.scrollDecelerationRate = 0.1f;
-                _scrollView.touchScrollBehavior = ScrollView.TouchScrollBehavior.Clamped;
-            }
-        }
-        
-        private void ConfigureButtons()
+        private void RegisterEventHandlers()
         {
             if (_backButton != null)
             {
-                _backButton.RegisterCallback<ClickEvent>(evt => {
-                    evt.StopPropagation();
-                    OnBackClicked();
-                });
+                _backButton.RegisterCallback<ClickEvent>(OnBackButtonClicked);
             }
             
             if (_moveUnitsButton != null)
             {
-                _moveUnitsButton.RegisterCallback<ClickEvent>(evt => {
-                    evt.StopPropagation();
-                    if (!_isProcessingClick)
-                    {
-                        _isProcessingClick = true;
-                        OnMoveUnitsClicked();
-                        StartCoroutine(ResetClickFlag());
-                    }
-                });
+                _moveUnitsButton.RegisterCallback<ClickEvent>(OnMoveUnitsButtonClicked);
+            }
+            
+            if (_executeQueryButton != null)
+            {
+                _executeQueryButton.RegisterCallback<ClickEvent>(OnExecuteQueryButtonClicked);
+            }
+            
+            EventManager.Instance.Subscribe(SqlEventType.QueryValidated, OnQueryValidated);
+        }
+        
+        private void OnBackButtonClicked(ClickEvent evt)
+        {
+            evt.StopPropagation();
+            EventManager.Instance.TriggerEvent(NavigationEventType.ToSqlMenu);
+        }
+        
+        private void OnMoveUnitsButtonClicked(ClickEvent evt)
+        {
+            evt.StopPropagation();
+            if (!_isProcessingClick)
+            {
+                _isProcessingClick = true;
+                CharacterVisualizationService.Instance.MoveCharactersToZone(resultZone);
+                StartCoroutine(ResetClickFlag());
+            }
+        }
+        
+        private void OnExecuteQueryButtonClicked(ClickEvent evt)
+        {
+            evt.StopPropagation();
+            if (!_isProcessingClick && _queryTextField != null)
+            {
+                _isProcessingClick = true;
+                ExecuteQuery(_queryTextField.value);
+                StartCoroutine(ResetClickFlag());
+            }
+        }
+        
+        private void OnQueryValidated()
+        {
+            // Espace réservé pour une logique future si nécessaire
+        }
+        
+        private void ExecuteQuery(string query)
+        {
+            if (string.IsNullOrEmpty(query)) return;
+            
+            CharacterDataService.Instance.ExecuteCharacterQuery(query, queryResults => {
+                DisplayQueryResults(queryResults);
+                EventManager.Instance.TriggerEvent(SqlEventType.QueryValidated);
+            });
+        }
+        
+        private void DisplayQueryResults(List<CharacterData> queryResults)
+        {
+            if (queryResults.Count == 0) return;
+            
+            if (resultZone != null)
+            {
+                CharacterVisualizationService.Instance.DestroyAllCharacters();
+                CharacterVisualizationService.Instance.InstantiateCharacters(queryResults, resultZone);
             }
         }
         
@@ -109,40 +192,32 @@ namespace Project.UI.SQL
         
         private void OnDisable()
         {
+            UnregisterEventHandlers();
+        }
+        
+        private void UnregisterEventHandlers()
+        {
             if (_backButton != null)
             {
-                _backButton.UnregisterCallback<ClickEvent>(evt => OnBackClicked());
+                _backButton.UnregisterCallback<ClickEvent>(OnBackButtonClicked);
             }
             
             if (_moveUnitsButton != null)
             {
-                _moveUnitsButton.UnregisterCallback<ClickEvent>(evt => OnMoveUnitsClicked());
+                _moveUnitsButton.UnregisterCallback<ClickEvent>(OnMoveUnitsButtonClicked);
             }
+            
+            if (_executeQueryButton != null)
+            {
+                _executeQueryButton.UnregisterCallback<ClickEvent>(OnExecuteQueryButtonClicked);
+            }
+            
+            EventManager.Instance.Unsubscribe(SqlEventType.QueryValidated, OnQueryValidated);
         }
         
-        private void OnBackClicked()
-        {
-            EventManager.Instance.TriggerEvent(NavigationEventType.ToSqlMenu);
-        }
-
-        private void OnMoveUnitsClicked()
-        {
-
-            foreach (Character character in _characters)
-            {
-                float speed = 2.0f;
-                character.RandomLocation(speed, -3f, 3f, -3f, 3f);
-            }
-
-        }
-
         private void OnDestroy()
         {
-            foreach (Character character in _characters)
-            {
-                character?.Destroy();
-            }
-            _characters.Clear();
+            CharacterVisualizationService.Instance.DestroyAllCharacters();
         }
     }
 }

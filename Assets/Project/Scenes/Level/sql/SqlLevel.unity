@@ -534,10 +534,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3039df8461a64723ae8ca2d96438abfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPrefabPath: Characters/sampleCharacterHuman
   spawnZone: {fileID: 1977952910}
   resultZone: {fileID: 1228864388}
-  gridSize: 10
+  gridSize: 3
 --- !u!1 &1228864388
 GameObject:
   m_ObjectHideFlags: 0

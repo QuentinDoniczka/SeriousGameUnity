@@ -77,7 +77,7 @@ namespace Project.Database
             {
                 _connectionService.CloseConnection();
                 
-                // DebugAllTables();
+                //DebugAllTables();
             }
         }
 

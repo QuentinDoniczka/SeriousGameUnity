@@ -23,8 +23,29 @@ namespace Project.Database.Services
             if (_isInitialized) return;
 
             string dbPath = Path.Combine(Application.temporaryCachePath, "game.db");
-            string connectionString = $"URI=file:{dbPath}";
             
+            try
+            {
+                if (File.Exists(dbPath))
+                {
+                    if (_connection != null && _connection.State != ConnectionState.Closed)
+                    {
+                        _connection.Close();
+                        _connection.Dispose();
+                        _connection = null;
+                    }
+            
+                    File.Delete(dbPath);
+                    Debug.Log($"Base de données existante supprimée: {dbPath}");
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError($"Échec de la suppression du fichier de base de données: {e.Message}");
+            }
+    
+            string connectionString = $"URI=file:{dbPath}";
+    
             try
             {
                 _connection = new SqliteConnection(connectionString);
@@ -32,7 +53,7 @@ namespace Project.Database.Services
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"Failed to initialize database connection: {e.Message}");
+                Debug.LogError($"Échec d'initialisation de la connexion: {e.Message}");
             }
         }
 

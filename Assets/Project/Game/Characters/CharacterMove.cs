@@ -11,7 +11,7 @@ namespace Project.Game.Characters
         private bool _isMoving = false;
         private Vector3 _lastPosition;
         
-        [SerializeField] private bool _forcePosition = true;
+        [SerializeField] private bool forcePosition = true;
 
         private void Awake()
         {
@@ -36,6 +36,11 @@ namespace Project.Game.Characters
                 {
                     transform.position = _targetPosition;
                     _isMoving = false;
+                    
+                    if (_animator != null)
+                    {
+                        _animator.Play("Idle");
+                    }
                 }
                 
                 _lastPosition = transform.position;
@@ -48,12 +53,12 @@ namespace Project.Game.Characters
             {
                 if (_isMoving)
                 {
-                    if (_forcePosition && transform.position != _lastPosition)
+                    if (forcePosition && transform.position != _lastPosition)
                     {
                         transform.position = _lastPosition;
                     }
                 }
-                else if (_forcePosition)
+                else if (forcePosition)
                 {
                     transform.position = _targetPosition;
                 }
@@ -70,21 +75,24 @@ namespace Project.Game.Characters
                 _moveSpeed = speed;
                 _isMoving = true;
                 _lastPosition = transform.position;
+                
+                if (_animator != null)
+                {
+                    _animator.Play("Run");
+                }
             }
             else
             {
                 transform.position = _targetPosition;
                 _lastPosition = _targetPosition;
                 _isMoving = false;
+                
+                if (_animator != null)
+                {
+                    _animator.Play("Idle");
+                }
             }
         }
-
-        public void StopOverriding()
-        {
-            _overridePosition = false;
-            _isMoving = false;
-        }
-        
         public bool IsMoving()
         {
             return _isMoving && _overridePosition;

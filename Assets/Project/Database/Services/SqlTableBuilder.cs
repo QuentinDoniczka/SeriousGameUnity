@@ -27,8 +27,7 @@ namespace Project.Database.Services
                 Debug.LogError("No 'tables' object found in JSON");
                 return;
             }
-
-            // Vérifier que la connexion est ouverte au début et la maintenir ouverte
+            
             bool connectionWasOpened = EnsureConnectionOpen();
 
             try
@@ -38,13 +37,10 @@ namespace Project.Database.Services
                     string tableName = tableProperty.Name;
                     JObject tableData = (JObject)tableProperty.Value;
                     
-                    // Créer un schéma de table à partir des données JSON
                     var schema = CreateSchemaFromJson(tableName, tableData["columns"]);
                     
-                    // Créer la table dans la base de données
                     CreateTableFromSchema(schema);
                     
-                    // Peupler la table avec les données
                     if (tableData["rows"] != null)
                     {
                         PopulateTable(schema, tableData["rows"]);
@@ -53,7 +49,6 @@ namespace Project.Database.Services
             }
             finally
             {
-                // Fermer la connexion seulement si nous l'avons ouverte
                 if (connectionWasOpened && _connection.State == ConnectionState.Open)
                 {
                     _connection.Close();

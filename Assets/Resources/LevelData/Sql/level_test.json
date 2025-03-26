@@ -5,21 +5,25 @@
         "id": "INTEGER PRIMARY KEY",
         "name": "TEXT",
         "faction": "TEXT",
-        "role": "TEXT",
-        "position_x": "REAL",
-        "position_y": "REAL"
+        "role": "TEXT"
       },
       "rows": [
-        { "id": 1, "name": "Jacques", "faction": "red", "role": "soldier", "position_x": 1.0, "position_y": 2.0 },
-        { "id": 2, "name": "Marie", "faction": "red", "role": "archer", "position_x": 2.0, "position_y": 3.0 },
-        { "id": 3, "name": "Pierre", "faction": "red", "role": "tank", "position_x": 1.0, "position_y": 1.0 },
-        { "id": 4, "name": "Sophie", "faction": "red", "role": "soldier", "position_x": 2.0, "position_y": 2.0 },
-        { "id": 5, "name": "Antoine", "faction": "red", "role": "archer", "position_x": 3.0, "position_y": 3.0 },
-        { "id": 6, "name": "Thomas", "faction": "blue", "role": "soldier", "position_x": 10.0, "position_y": 12.0 },
-        { "id": 7, "name": "Camille", "faction": "blue", "role": "soldier", "position_x": 11.0, "position_y": 13.0 },
-        { "id": 8, "name": "Lucas", "faction": "blue", "role": "tank", "position_x": 10.0, "position_y": 11.0 },
-        { "id": 9, "name": "Sarah", "faction": "blue", "role": "tank", "position_x": 11.0, "position_y": 12.0 },
-        { "id": 10, "name": "Chloé", "faction": "blue", "role": "archer", "position_x": 9.0, "position_y": 13.0 }
+        { "id": 1, "name": "Jacques", "faction": "red", "role": "soldier" },
+        { "id": 2, "name": "Marie", "faction": "red", "role": "mage" },
+        { "id": 3, "name": "Pierre", "faction": "red", "role": "knight" },
+        { "id": 4, "name": "Sophie", "faction": "red", "role": "soldier" },
+        { "id": 5, "name": "Antoine", "faction": "red", "role": "mage" },
+        { "id": 6, "name": "Thomas", "faction": "blue", "role": "soldier" },
+        { "id": 7, "name": "Camille", "faction": "blue", "role": "soldier" },
+        { "id": 8, "name": "Lucas", "faction": "blue", "role": "knight" },
+        { "id": 9, "name": "Sarah", "faction": "blue", "role": "knight" },
+        { "id": 10, "name": "Chloé", "faction": "blue", "role": "mage" },
+        { "id": 11, "name": "Julien", "faction": "red", "role": "healer" },
+        { "id": 12, "name": "Emma", "faction": "red", "role": "healer" },
+        { "id": 13, "name": "Léo", "faction": "blue", "role": "healer" },
+        { "id": 14, "name": "Jade", "faction": "blue", "role": "healer" },
+        { "id": 15, "name": "Matteo", "faction": "red", "role": "knight" },
+        { "id": 16, "name": "Inès", "faction": "blue", "role": "mage" }
       ]
     },
 
@@ -30,35 +34,41 @@
         "health": "INTEGER",
         "attack": "INTEGER",
         "defense": "INTEGER",
-        "age": "INTEGER",
+        "mana": "INTEGER",
         "experience": "INTEGER",
         "FOREIGN KEY(army_id)": "REFERENCES army(id)"
       },
       "rows": [
-        { "id": 1, "army_id": 1, "health": 100, "attack": 15, "defense": 10, "age": 25, "experience": 3 },
-        { "id": 2, "army_id": 2, "health": 85, "attack": 22, "defense": 4, "age": 22, "experience": 2 },
-        { "id": 3, "army_id": 3, "health": 220, "attack": 25, "defense": 30, "age": 35, "experience": 10 },
-        { "id": 4, "army_id": 4, "health": 110, "attack": 14, "defense": 12, "age": 27, "experience": 4 },
-        { "id": 5, "army_id": 5, "health": 75, "attack": 25, "defense": 5, "age": 20, "experience": 1 },
-        { "id": 6, "army_id": 6, "health": 105, "attack": 16, "defense": 9, "age": 26, "experience": 3 },
-        { "id": 7, "army_id": 7, "health": 95, "attack": 18, "defense": 8, "age": 24, "experience": 2 },
-        { "id": 8, "army_id": 8, "health": 190, "attack": 28, "defense": 28, "age": 32, "experience": 8 },
-        { "id": 9, "army_id": 9, "health": 210, "attack": 24, "defense": 32, "age": 34, "experience": 9 },
-        { "id": 10, "army_id": 10, "health": 80, "attack": 30, "defense": 5, "age": 21, "experience": 2 }
+        { "id": 1, "army_id": 1, "health": 100, "attack": 15, "defense": 10, "mana": 0, "experience": 3 },
+        { "id": 2, "army_id": 2, "health": 70, "attack": 25, "defense": 5, "mana": 120, "experience": 2 },
+        { "id": 3, "army_id": 3, "health": 150, "attack": 18, "defense": 25, "mana": 0, "experience": 10 },
+        { "id": 4, "army_id": 4, "health": 110, "attack": 14, "defense": 12, "mana": 0, "experience": 4 },
+        { "id": 5, "army_id": 5, "health": 65, "attack": 30, "defense": 4, "mana": 150, "experience": 5 },
+        { "id": 6, "army_id": 6, "health": 105, "attack": 16, "defense": 9, "mana": 0, "experience": 3 },
+        { "id": 7, "army_id": 7, "health": 95, "attack": 18, "defense": 8, "mana": 0, "experience": 2 },
+        { "id": 8, "army_id": 8, "health": 160, "attack": 20, "defense": 22, "mana": 0, "experience": 8 },
+        { "id": 9, "army_id": 9, "health": 145, "attack": 19, "defense": 24, "mana": 0, "experience": 7 },
+        { "id": 10, "army_id": 10, "health": 75, "attack": 28, "defense": 5, "mana": 130, "experience": 4 },
+        { "id": 11, "army_id": 11, "health": 90, "attack": 5, "defense": 8, "mana": 140, "experience": 6 },
+        { "id": 12, "army_id": 12, "health": 85, "attack": 6, "defense": 7, "mana": 150, "experience": 5 },
+        { "id": 13, "army_id": 13, "health": 95, "attack": 4, "defense": 9, "mana": 135, "experience": 6 },
+        { "id": 14, "army_id": 14, "health": 80, "attack": 7, "defense": 6, "mana": 145, "experience": 4 },
+        { "id": 15, "army_id": 15, "health": 155, "attack": 17, "defense": 23, "mana": 0, "experience": 9 },
+        { "id": 16, "army_id": 16, "health": 70, "attack": 26, "defense": 6, "mana": 125, "experience": 3 }
       ]
     }
   },
   "tasks": [
     {
       "id": 1,
-      "name": "Trouver les archers",
-      "description": "Récupérer uniquement le nom et le rôle de tous les archers de la faction rouge",
+      "name": "Trouver les mages",
+      "description": "Récupérer uniquement le nom et le rôle de tous les mages de la faction rouge",
       "difficulty": "facile",
-      "query": "SELECT name, role FROM army WHERE role = 'archer' AND faction = 'red'",
+      "query": "SELECT name, role FROM army WHERE role = 'mage' AND faction = 'red'",
       "hint": "Utilisez WHERE pour filtrer par rôle et faction",
       "expected": [
-        { "name": "Marie", "role": "archer" },
-        { "name": "Antoine", "role": "archer" }
+        { "name": "Marie", "role": "mage" },
+        { "name": "Antoine", "role": "mage" }
       ],
       "allowed_commands": ["SELECT", "FROM", "WHERE"]
     },
@@ -70,9 +80,9 @@
       "query": "SELECT a.name, a.role, s.attack FROM army a JOIN stats s ON a.id = s.army_id WHERE a.faction = 'blue' ORDER BY s.attack DESC LIMIT 3",
       "hint": "Utilisez JOIN, ORDER BY et LIMIT",
       "expected": [
-        { "name": "Chloé", "role": "archer", "attack": 30 },
-        { "name": "Lucas", "role": "tank", "attack": 28 },
-        { "name": "Sarah", "role": "tank", "attack": 24 }
+        { "name": "Chloé", "role": "mage", "attack": 28 },
+        { "name": "Inès", "role": "mage", "attack": 26 },
+        { "name": "Lucas", "role": "knight", "attack": 20 }
       ],
       "allowed_commands": ["SELECT", "FROM", "JOIN", "WHERE", "ORDER BY", "LIMIT"]
     },
@@ -84,11 +94,89 @@
       "query": "SELECT a.role, AVG(s.attack + s.defense) as puissance_moyenne FROM army a JOIN stats s ON a.id = s.army_id GROUP BY a.role ORDER BY puissance_moyenne DESC",
       "hint": "Utilisez JOIN, fonctions d'agrégation et GROUP BY pour calculer la moyenne par rôle",
       "expected": [
-        { "role": "tank", "puissance_moyenne": 54.5 },
-        { "role": "archer", "puissance_moyenne": 28.0 },
-        { "role": "soldier", "puissance_moyenne": 25.25 }
+        { "role": "knight", "puissance_moyenne": 41.25 },
+        { "role": "mage", "puissance_moyenne": 34.5 },
+        { "role": "soldier", "puissance_moyenne": 25.5 },
+        { "role": "healer", "puissance_moyenne": 13.75 }
       ],
       "allowed_commands": ["SELECT", "FROM", "JOIN", "GROUP BY", "ORDER BY", "AVG"]
+    },
+    {
+      "id": 4,
+      "name": "Sélection tactique",
+      "description": "Sélectionner 2 soldats et 1 soigneur de la faction rouge",
+      "difficulty": "facile",
+      "query": "SELECT name, role FROM army WHERE faction = 'red' AND (role = 'soldier' OR role = 'healer') LIMIT 3",
+      "hint": "Utilisez WHERE avec des conditions OR, et LIMIT pour limiter le nombre de résultats",
+      "expected": [
+        { "name": "Jacques", "role": "soldier" },
+        { "name": "Sophie", "role": "soldier" },
+        { "name": "Julien", "role": "healer" }
+      ],
+      "allowed_commands": ["SELECT", "FROM", "WHERE", "OR", "LIMIT"]
+    },
+    {
+      "id": 5,
+      "name": "Équilibrage d'équipe",
+      "description": "Compter le nombre d'unités par rôle et par faction",
+      "difficulty": "moyenne",
+      "query": "SELECT faction, role, COUNT(*) as nombre FROM army GROUP BY faction, role ORDER BY faction, role",
+      "hint": "Utilisez GROUP BY pour regrouper par faction et rôle, puis COUNT pour compter",
+      "expected": [
+        { "faction": "blue", "role": "healer", "nombre": 2 },
+        { "faction": "blue", "role": "knight", "nombre": 2 },
+        { "faction": "blue", "role": "mage", "nombre": 2 },
+        { "faction": "blue", "role": "soldier", "nombre": 2 },
+        { "faction": "red", "role": "healer", "nombre": 2 },
+        { "faction": "red", "role": "knight", "nombre": 2 },
+        { "faction": "red", "role": "mage", "nombre": 2 },
+        { "faction": "red", "role": "soldier", "nombre": 2 }
+      ],
+      "allowed_commands": ["SELECT", "FROM", "GROUP BY", "COUNT", "ORDER BY"]
+    },
+    {
+      "id": 6,
+      "name": "Santé moyenne par faction",
+      "description": "Calculer la santé moyenne des unités de chaque faction",
+      "difficulty": "moyenne",
+      "query": "SELECT a.faction, AVG(s.health) as sante_moyenne FROM army a JOIN stats s ON a.id = s.army_id GROUP BY a.faction",
+      "hint": "Utilisez JOIN et GROUP BY avec la fonction d'agrégation AVG",
+      "expected": [
+        { "faction": "blue", "sante_moyenne": 103.75 },
+        { "faction": "red", "sante_moyenne": 103.125 }
+      ],
+      "allowed_commands": ["SELECT", "FROM", "JOIN", "GROUP BY", "AVG"]
+    },
+    {
+      "id": 7,
+      "name": "Unités d'élite",
+      "description": "Sélectionner les unités ayant plus de 5 points d'expérience et les classer par rôle et expérience",
+      "difficulty": "moyenne",
+      "query": "SELECT a.name, a.role, s.experience FROM army a JOIN stats s ON a.id = s.army_id WHERE s.experience > 5 ORDER BY a.role, s.experience DESC",
+      "hint": "Utilisez JOIN, WHERE pour filtrer et ORDER BY pour trier",
+      "expected": [
+        { "name": "Julien", "role": "healer", "experience": 6 },
+        { "name": "Léo", "role": "healer", "experience": 6 },
+        { "name": "Pierre", "role": "knight", "experience": 10 },
+        { "name": "Lucas", "role": "knight", "experience": 8 },
+        { "name": "Sarah", "role": "knight", "experience": 7 }
+      ],
+      "allowed_commands": ["SELECT", "FROM", "JOIN", "WHERE", "ORDER BY"]
+    },
+    {
+      "id": 8,
+      "name": "Formation tactique",
+      "description": "Sélectionner une équipe composée d'au moins 1 unité de chaque rôle dans la faction rouge",
+      "difficulty": "difficile",
+      "query": "SELECT name, role FROM army WHERE faction = 'red' AND role IN (SELECT DISTINCT role FROM army) GROUP BY role LIMIT 4",
+      "hint": "Utilisez une sous-requête pour obtenir les rôles distincts, puis GROUP BY pour obtenir une unité de chaque rôle",
+      "expected": [
+        { "name": "Jacques", "role": "soldier" },
+        { "name": "Marie", "role": "mage" },
+        { "name": "Pierre", "role": "knight" },
+        { "name": "Julien", "role": "healer" }
+      ],
+      "allowed_commands": ["SELECT", "FROM", "WHERE", "GROUP BY", "IN", "DISTINCT", "LIMIT"]
     }
   ]
 }
