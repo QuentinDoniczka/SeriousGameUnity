@@ -3,34 +3,75 @@
     <ui:VisualElement name="container" class="container">
         <ui:VisualElement name="content-area" class="content-area">
             <ui:ScrollView name="scroll-view" class="scroll-view">
+                <!-- Ligne 1: SELECT * fixe -->
                 <ui:VisualElement name="row-1" class="row row-dark">
-                    <ui:VisualElement name="button-container" class="button-container">
-                        <ui:Button name="move-units-button" class="action-button" text="Move" focusable="true" />
+                    <ui:VisualElement class="sql-row">
+                        <ui:Label text="SELECT *" class="sql-keyword" />
                     </ui:VisualElement>
                 </ui:VisualElement>
+                
+                <!-- Ligne 2: FROM avec dropdown -->
                 <ui:VisualElement name="row-2" class="row row-light">
-                    <ui:VisualElement name="button-container-2" class="button-container">
-                        <ui:Button name="move-back-button" class="action-button" text="Move Back" focusable="true" />
+                    <ui:VisualElement class="sql-row">
+                        <ui:Label text="FROM" class="sql-keyword" />
+                        <ui:DropdownField name="table-dropdown" class="sql-dropdown" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement name="row-3" class="row row-dark" />
-                <ui:VisualElement name="row-4" class="row row-light" />
-                <ui:VisualElement name="row-5" class="row row-dark" />
-                <ui:VisualElement name="row-6" class="row row-light" />
-                <ui:VisualElement name="row-7" class="row row-dark" />
-                <ui:VisualElement name="row-8" class="row row-light" />
-                <ui:VisualElement name="row-9" class="row row-dark" />
-                <ui:VisualElement name="row-10" class="row row-light" />
+                
+                <!-- Ligne 3: WHERE avec premier dropdown (champ) -->
+                <ui:VisualElement name="row-3" class="row row-dark">
+                    <ui:VisualElement class="sql-row">
+                        <ui:Label text="WHERE" class="sql-keyword" />
+                        <ui:DropdownField name="field-dropdown" class="sql-dropdown" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                
+                <!-- Ligne 3b: Suite de WHERE avec opérateur et valeur -->
+                <ui:VisualElement name="row-3b" class="row row-dark where-continuation">
+                    <ui:VisualElement class="sql-row">
+                        <ui:Label text="" class="sql-keyword-empty" />
+                        <ui:DropdownField name="operator-dropdown" class="sql-dropdown" />
+                        <ui:DropdownField name="value-dropdown" class="sql-dropdown" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                
+                <!-- Ligne 4: ORDER BY avec dropdown -->
+                <ui:VisualElement name="row-4" class="row row-light">
+                    <ui:VisualElement class="sql-row">
+                        <ui:Label text="ORDER BY" class="sql-keyword" />
+                        <ui:DropdownField name="group-dropdown" class="sql-dropdown" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                
+                <!-- Espace pour résultat ou prévisualisation -->
+                <ui:VisualElement name="row-5" class="row row-dark">
+                    <ui:Label name="query-preview" class="query-preview" />
+                </ui:VisualElement>
+                
+                <!-- Boutons d'action -->
+                <ui:VisualElement name="row-6" class="row row-light">
+                    <ui:VisualElement class="button-container">
+                        <ui:Button name="move-back-button" class="action-button-full" text="Réinitialiser" focusable="true" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
             </ui:ScrollView>
         </ui:VisualElement>
 
         <ui:VisualElement name="transition-layer" class="transition-layer" />
 
         <ui:VisualElement name="nav-bar" class="nav-bar">
-            <ui:Button name="hint-button" class="nav-button nav-button-first" text="1" />
-            <ui:Button name="prev-button" class="nav-button" text="2" />
-            <ui:Button name="next-button" class="nav-button" text="3" />
-            <ui:Button name="exit-button" class="nav-button" text="4" />
+            <ui:Button name="hint-button" class="nav-button nav-button-first" text="?" />
+            <ui:Button name="prev-button" class="nav-button" text="←" />
+            <ui:Button name="next-button" class="nav-button" text="→" />
+            <ui:Button name="exit-button" class="nav-button" text="X" />
+        </ui:VisualElement>
+        
+        <ui:VisualElement name="hint-popup" class="hint-popup hidden">
+            <ui:VisualElement class="hint-content">
+                <ui:Label name="task-description" class="hint-title" />
+                <ui:Label name="hint-text" class="hint-text" />
+                <ui:Button name="close-hint-button" class="close-hint-button" text="OK" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

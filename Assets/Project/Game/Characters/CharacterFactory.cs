@@ -21,7 +21,7 @@ namespace Project.Game.Characters
                 : RoleToPrefabPath["soldier"];
         }
         
-        public static Character CreateFromPrefab(string prefabPath, Vector2 position, Transform parent = null)
+        public static Character CreateFromPrefab(string prefabPath, Vector2 position, int id = 0, Transform parent = null)
         {
             GameObject prefab = Resources.Load<GameObject>(prefabPath);
             
@@ -39,7 +39,7 @@ namespace Project.Game.Characters
                 return null;
             }
             
-            Character character = new Character(instance, prefabPath);
+            Character character = new Character(instance, prefabPath, id);
             
             if (parent != null)
             {
@@ -49,16 +49,16 @@ namespace Project.Game.Characters
             return character;
         }
         
-        public static Character CreateInSafeZone(string prefabPath, GameObject safeZone, Vector2 normalizedPosition, Transform parent = null)
+        public static Character CreateInSafeZone(string prefabPath, GameObject safeZone, Vector2 normalizedPosition, int id = 0, Transform parent = null)
         {
             Vector2 position = ZoneUtility.GetPositionInZone(safeZone, normalizedPosition);
-            return CreateFromPrefab(prefabPath, position, parent);
+            return CreateFromPrefab(prefabPath, position, id, parent);
         }
         
         public static Character CreateCharacterFromData(CharacterData data, GameObject spawnZone, Vector2 normalizedPosition, Transform parent = null)
         {
             string prefabPath = GetPrefabPathForRole(data.Role);
-            Character character = CreateInSafeZone(prefabPath, spawnZone, normalizedPosition, parent);
+            Character character = CreateInSafeZone(prefabPath, spawnZone, normalizedPosition, data.Id, parent);
             
             if (character != null)
             {

@@ -4,6 +4,7 @@ namespace Project.Game.Characters
 {
     public class Character
     {
+        public int Id { get; private set; }
         public GameObject Instance { get; private set; }
         public string PrefabPath { get; private set; }
         private CharacterMove _move;
@@ -46,8 +47,9 @@ namespace Project.Game.Characters
 
         public bool IsMoving => _move != null && _move.IsMoving();
 
-        public Character(GameObject instance, string prefabPath)
+        public Character(GameObject instance, string prefabPath, int id = 0)
         {
+            Id = id;
             Instance = instance;
             PrefabPath = prefabPath;
             StartPosition = instance.transform.position;
