@@ -5,6 +5,19 @@ using System.Data;
 
 namespace Project.Database.Services
 {
+    /// <summary>
+    /// Provides methods to execute SQL queries and manage database operations in Unity
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>Handles SQL query execution with proper connection management</item>
+    /// <item>Provides methods for both data retrieval and modification operations</item>
+    /// <item>Includes utilities for database structure management (listing and dropping tables)</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class SqlQueryService
     {
         private readonly SqlConnectionService _connectionService;

@@ -6,10 +6,23 @@ using Project.Game.Characters.Services;
 using System.Collections;
 using System.Collections.Generic;
 using Project.Database.Models;
-using Project.Game.Characters;
 
 namespace Project.UI.SQL
 { 
+    /// <summary>
+    /// SQL interface panel that allows users to build and execute SQL queries through an interactive UI
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>Manages the SQL query builder interface with dropdown selections for tables, fields, operators, and values</item>
+    /// <item>Handles character visualization based on query results</item>
+    /// <item>Provides task navigation and hint system for SQL learning</item>
+    /// <item>Supports dynamic query building with visual preview</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class SqlPanel : MonoBehaviour
     {
         [SerializeField] private GameObject spawnZone;

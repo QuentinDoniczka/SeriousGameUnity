@@ -6,6 +6,19 @@ using System.Data;
 
 namespace Project.Database.Services
 {
+    /// <summary>
+    /// Provides debugging utilities for SQLite databases, allowing for inspection of database tables and their contents
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>DebugAllTables: Lists and outputs all tables in the database</item>
+    /// <item>DebugTable: Outputs the structure and content of a specific table</item>
+    /// <item>Manages connection state throughout debugging operations</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class SqlDebugger
     {
         private readonly SqliteConnection _connection;
@@ -19,7 +32,6 @@ namespace Project.Database.Services
         {
             try
             {
-                // Ouvrir la connexion si nécessaire
                 bool wasConnectionClosed = false;
                 if (_connection.State != ConnectionState.Open)
                 {
@@ -111,7 +123,6 @@ namespace Project.Database.Services
             }
             finally
             {
-                // Fermer la connexion seulement si nous l'avons ouverte
                 if (wasConnectionClosed && _connection.State == ConnectionState.Open)
                 {
                     _connection.Close();

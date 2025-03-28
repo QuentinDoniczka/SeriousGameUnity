@@ -8,6 +8,20 @@ using Project.Api.Models.Requests;
 
 namespace Project.UI.Auth
 {
+    /// <summary>
+    /// Handles the login panel UI and authentication process for users
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>Manages login form UI elements and input validation</item>
+    /// <item>Processes login credentials through the UserApiService</item>
+    /// <item>Handles error states and provides user feedback</item>
+    /// <item>Manages navigation to registration or main menu screens</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class LoginPanel : MonoBehaviour
     {
         [SerializeField] private TMP_InputField emailInput;

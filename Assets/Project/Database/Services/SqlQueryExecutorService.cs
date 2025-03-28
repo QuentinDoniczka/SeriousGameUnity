@@ -7,6 +7,19 @@ using Project.Game.Characters;
 
 namespace Project.Database.Services
 {
+    /// <summary>
+    /// Service for executing SQL queries against the game database and processing character data results.
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>Implements a singleton pattern for database access</item>
+    /// <item>Provides methods to execute SQL queries and extract character data</item>
+    /// <item>Handles the conversion between SQL query results and CharacterData objects</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class SqlQueryExecutorService
     {
         private static SqlQueryExecutorService _instance;

@@ -9,6 +9,20 @@ using System.Collections;
 
 namespace Project.UI.Auth 
 {
+    /// <summary>
+    /// Manages the user registration panel, handling form validation and API communication
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>Validates user input for registration form</item>
+    /// <item>Communicates with user API service for registration</item>
+    /// <item>Handles error display and success redirection</item>
+    /// <item>Manages UI component interactions and event triggering</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
    public class RegisterPanel : MonoBehaviour
    {
        [SerializeField] private TMP_InputField usernameInput;

@@ -6,6 +6,19 @@ using Project.Core.Service;
 
 namespace Project.Game.Characters.Services
 {
+    /// <summary>
+    /// Manages character data operations providing access to character information through a singleton pattern.
+    /// </summary>
+    /// <remarks>
+    /// This service handles character data operations including:
+    /// <list type="bullet">
+    /// <item>Loading character data from database</item>
+    /// <item>Retrieving character collections</item>
+    /// <item>Executing custom SQL queries on character data</item>
+    /// <item>Managing the character data lifecycle</item>
+    /// </list>
+    /// The service implements a singleton pattern to ensure single instance usage across the application.
+    /// </remarks>
     public class CharacterDataService
     {
         private static CharacterDataService _instance;

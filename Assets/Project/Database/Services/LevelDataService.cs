@@ -4,6 +4,20 @@ using Newtonsoft.Json;
 
 namespace Project.Database.Services
 {
+    /// <summary>
+    /// Service managing level data loading, validation and deserialization from JSON files.
+    /// </summary>
+    /// <remarks>
+    /// Detailed service description:
+    /// <list type="bullet">
+    /// <item>Loads level data from JSON files stored in Resources/LevelData folder</item>
+    /// <item>Provides validation of JSON level data structure</item>
+    /// <item>Handles deserialization of JSON data into LevelData objects</item>
+    /// <item>Maintains reference to currently loaded level data</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class LevelDataService
     {
         private string _currentLevelJson;

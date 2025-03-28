@@ -4,6 +4,20 @@ using Project.Game.Utilities;
 
 namespace Project.Game.Characters
 {
+    /// <summary>
+    /// A factory class that handles character creation and instantiation from prefabs.
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>Creates characters from prefabs with customizable positions and parameters</item>
+    /// <item>Supports batch character creation from data lists</item>
+    /// <item>Handles safe zone placement with normalized positioning</item>
+    /// <item>Manages character role to prefab path mapping</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public static class CharacterFactory
     {
         private static readonly Dictionary<string, string> RoleToPrefabPath = new Dictionary<string, string>

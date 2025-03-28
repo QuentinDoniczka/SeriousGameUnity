@@ -5,6 +5,19 @@ using UnityEngine;
 
 namespace Project.UI.HUD
 {
+    /// <summary>
+    /// Manages SQL tasks and queries for the HUD interface
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>Implements singleton pattern for global access</item>
+    /// <item>Handles SQL task management and validation</item>
+    /// <item>Interfaces with event system for scene transitions</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class HudSqlManager : MonoBehaviour
     {
         private static HudSqlManager _instance;

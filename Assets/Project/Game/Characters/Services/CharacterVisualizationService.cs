@@ -4,6 +4,20 @@ using Project.Database.Models;
 
 namespace Project.Game.Characters.Services
 {
+    /// <summary>
+    /// Manages the visualization, spawning, and movement of characters in the game world
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>Provides character instantiation from data models</item>
+    /// <item>Handles character movement with various positioning strategies</item>
+    /// <item>Implements singleton pattern for global access</item>
+    /// <item>Manages character lifecycle and reference tracking</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class CharacterVisualizationService
     {
         private static CharacterVisualizationService _instance;

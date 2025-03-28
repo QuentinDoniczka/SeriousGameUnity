@@ -5,6 +5,22 @@ using System.Data;
 
 namespace Project.Database.Services
 {
+    /// <summary>
+    /// Manages SQLite database connections for the application.
+    /// </summary>
+    /// <remarks>
+    /// Provides functionality for:
+    /// <list type="bullet">
+    /// <item>Initializing the database connection</item>
+    /// <item>Opening and closing the connection safely</item>
+    /// <item>Ensuring connection state before operations</item>
+    /// <item>Proper resource disposal</item>
+    /// </list>
+    /// This service handles the complete lifecycle of the SQLite connection, including
+    /// database file management, connection string creation, and error handling.
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class SqlConnectionService
     {
         private SqliteConnection _connection;

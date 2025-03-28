@@ -2,6 +2,20 @@
 
 namespace Project.Game.Characters
 {
+    /// <summary>
+    /// Controls character movement with smooth transitions and animation synchronization.
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>Handles character movement using Vector3 position targeting</item>
+    /// <item>Manages animation states during movement (Run/Idle)</item>
+    /// <item>Prevents position overrides through forcePosition parameter</item>
+    /// <item>Provides public interface for movement control and state checking</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class CharacterMove : MonoBehaviour
     {
         private Animator _animator;

@@ -5,6 +5,20 @@ using Project.Database.Models;
 
 namespace Project.Database
 {
+    /// <summary>
+    /// Manages SQLite database operations and services for the game's data system
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>Handles database connection initialization and management</item>
+    /// <item>Provides methods for loading and initializing level data from JSON</item>
+    /// <item>Offers query execution and debugging functionality</item>
+    /// <item>Coordinates between different database services</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class SqlManager : MonoBehaviour
     {
         private SqlConnectionService _connectionService;

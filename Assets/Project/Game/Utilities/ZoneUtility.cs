@@ -4,6 +4,19 @@ namespace Project.Game.Utilities
 {
     public static class ZoneUtility
     {
+        /// <summary>
+        /// Provides utility methods for working with game zones and calculating positions within them.
+        /// </summary>
+        /// <remarks>
+        /// Detailed file description:
+        /// <list type="bullet">
+        /// <item>GetZoneBounds - Calculates the boundaries of a zone as a Rect</item>
+        /// <item>GetPositionInZone - Converts a normalized position to world coordinates within a zone</item>
+        /// <item>GetRandomPositionInZone - Generates a random position within a zone's boundaries</item>
+        /// </list>
+        /// </remarks>
+        /// <author>Quentin Doniczka</author>
+        /// <date>28/03/2025</date>
         public static Rect GetZoneBounds(GameObject zone)
         {
             if (zone == null)

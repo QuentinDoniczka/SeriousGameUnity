@@ -6,6 +6,20 @@ using UnityEngine;
 
 namespace Project.Core
 {
+    /// <summary>
+    /// Singleton manager responsible for initializing and maintaining core systems of the application.
+    /// </summary>
+    /// <remarks>
+    /// This class handles:
+    /// <list type="bullet">
+    /// <item>Singleton pattern implementation with instance protection</item>
+    /// <item>Core systems initialization in the proper sequence</item>
+    /// <item>Persistence between scene transitions</item>
+    /// <item>Initial navigation event triggering</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class CoreManager : MonoBehaviour
     {
         private static CoreManager _instance;

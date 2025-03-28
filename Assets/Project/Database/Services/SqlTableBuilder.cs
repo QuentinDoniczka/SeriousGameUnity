@@ -8,6 +8,20 @@ using Project.Database.Models;
 
 namespace Project.Database.Services
 {
+    /// <summary>
+    /// Handles the creation and population of SQLite tables from JSON configuration
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>Creates database tables based on JSON structure</item>
+    /// <item>Generates column definitions from JSON specifications</item>
+    /// <item>Populates tables with initial data if provided</item>
+    /// <item>Manages SQLite connection states automatically</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class SqlTableBuilder
     {
         private readonly SqliteConnection _connection;

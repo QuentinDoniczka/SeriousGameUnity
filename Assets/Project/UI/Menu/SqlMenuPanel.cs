@@ -4,6 +4,19 @@ using UnityEngine.UI;
 
 namespace Project.UI.Menu
 {
+    /// <summary>
+    /// Handles the SQL menu panel user interface and navigation
+    /// </summary>
+    /// <remarks>
+    /// This class manages the SQL menu panel, providing functionality to:
+    /// <list type="bullet">
+    /// <item>Navigate back to the login screen</item>
+    /// <item>Launch the SQL test level</item>
+    /// <item>Properly clean up event listeners when destroyed</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class SqlMenuPanel : MonoBehaviour
     {
         [SerializeField] private Button returnButton;

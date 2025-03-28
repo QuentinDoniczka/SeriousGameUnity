@@ -5,6 +5,20 @@ using Project.Core.Events;
 
 namespace Project.Game.Managers
 {
+    /// <summary>
+    /// Main game manager responsible for level management and initialization of the game environment
+    /// </summary>
+    /// <remarks>
+    /// Detailed file description:
+    /// <list type="bullet">
+    /// <item>Handles singleton pattern implementation for global access</item>
+    /// <item>Manages level loading from JSON resources</item>
+    /// <item>Initializes database through SQL service</item>
+    /// <item>Manages navigation events between game levels</item>
+    /// </list>
+    /// </remarks>
+    /// <author>Quentin Doniczka</author>
+    /// <date>28/03/2025</date>
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private string initialLevelName = "level_test";

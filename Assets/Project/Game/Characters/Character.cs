@@ -2,6 +2,21 @@
 
 namespace Project.Game.Characters
 {
+    /// <summary>
+    /// Represents a game character with movement capabilities and position management.
+    /// </summary>
+    /// <remarks>
+    /// This class manages a character's lifecycle, including:
+    /// <list type="bullet">
+    /// <item>Character instantiation and destruction</item>
+    /// <item>Position control and movement operations</item>
+    /// <item>Parent-child relationship with other objects</item>
+    /// <item>Zone-based positioning with customizable speeds</item>
+    /// </list>
+    /// The Character class serves as a wrapper around a GameObject instance,
+    /// providing convenient access to position data and movement functionality
+    /// through the CharacterMove component.
+    /// </remarks>
     public class Character
     {
         public int Id { get; private set; }

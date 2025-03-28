@@ -11,6 +11,19 @@ namespace Project.Api.User
 {
     public class UserApiService : IUserApiService
     {
+        /// <summary>
+        /// Service for handling user authentication and registration operations through API calls
+        /// </summary>
+        /// <remarks>
+        /// Detailed file description:
+        /// <list type="bullet">
+        /// <item>Implements login and registration API methods</item>
+        /// <item>Uses UnityWebRequest for HTTP communication</item>
+        /// <item>Handles JSON serialization and deserialization of requests and responses</item>
+        /// </list>
+        /// </remarks>
+        /// <author>Quentin Doniczka</author>
+        /// <date>28/03/2025</date>
         private UnityWebRequest CreatePostRequest<T>(string url, T data)
         {
             var request = new UnityWebRequest(url, "POST");

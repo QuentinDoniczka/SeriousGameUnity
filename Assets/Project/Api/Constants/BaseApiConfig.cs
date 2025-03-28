@@ -1,5 +1,4 @@
-﻿// Project/Api/Constants/BaseApiConstants.cs
-namespace Project.Api.Constants
+﻿namespace Project.Api.Constants
 {
     public static class BaseApiConstants
     {
